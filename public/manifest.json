@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Petri Net Tool",
+  "name": "Create and simulate petri nets",
   "icons": [
     {
       "src": "favicon.ico",
