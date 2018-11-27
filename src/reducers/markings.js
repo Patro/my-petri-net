@@ -1,5 +1,5 @@
 import {
-  ADD_NODE, REMOVE_NODE,
+  ADD_NODE, REMOVE_NODE, SET_CAPACITY_LIMIT,
   SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS
 } from '../actions';
 
@@ -15,6 +15,16 @@ const markings = (state = [{}], action) => {
         let mapped = { ...marking };
         delete(mapped[action.nodeId]);
         return mapped;
+      });
+    case SET_CAPACITY_LIMIT:
+      return state.map(marking => {
+        if (marking[action.placeId] <= action.capacityLimit) {
+          return marking;
+        }
+        return {
+          ...marking,
+          [action.placeId]: action.capacityLimit,
+        };
       });
     case SET_INITIAL_NUMBER_OF_TOKENS: {
       let next = [...state];
