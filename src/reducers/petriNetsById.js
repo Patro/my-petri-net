@@ -1,4 +1,5 @@
-import { ADD_PETRI_NET } from '../actions';
+import petriNet from './petriNet';
+import { ADD_PETRI_NET, ADD_EDGE } from '../actions';
 
 const initialState = {};
 
@@ -11,6 +12,11 @@ const petriNetsByIds = (state = initialState, action) => {
           id: action.petriNetId,
           name: action.name
         }
+      };    
+    case ADD_EDGE:
+      return {
+        ...state,
+        [action.petriNetId]: petriNet(state[action.petriNetId], action),
       };
     default:
       return state;
