@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Redirect, BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import App from './components/App';
@@ -11,7 +12,13 @@ const store = createStore(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <Switch>
+        <Route path="/:id/:mode(edit|simulate)" component={App} />
+        <Redirect from="/:id" to="/:id/edit" />
+        <Redirect to={`/${store.getState().petriNets[0]}/edit`} />
+      </Switch>
+    </Router>
   </Provider>,
   document.getElementById('root')
 );
