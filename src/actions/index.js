@@ -11,6 +11,7 @@ export const SET_CAPACITY_LIMIT = 'SET_CAPACITY_LIMIT';
 export const REMOVE_CAPACITY_LIMIT = 'REMOVE_CAPACITY_LIMIT';
 export const SET_INITIAL_NUMBER_OF_TOKENS = 'SET_INITIAL_NUMBER_OF_TOKENS';
 export const RESET_MARKINGS = 'RESET_MARKINGS';
+export const FIRE_TRANSITION = 'FIRE_TRANSITIONS';
 
 export const addPetriNet = name => ({
   type: ADD_PETRI_NET,
@@ -83,4 +84,10 @@ export const setInitialNumberOfTokens = (petriNetId, placeId, numberOfTokens) =>
 export const resetMarkings = (petriNetId) => ({
   type: RESET_MARKINGS,
   petriNetId,
+});
+
+export const fireTransition = (petriNetId, transitionId) => ({
+  type: FIRE_TRANSITION,
+  petriNetId,
+  transitionId,
 });
