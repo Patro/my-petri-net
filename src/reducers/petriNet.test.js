@@ -66,17 +66,20 @@ describe('petri net reducer', () => {
   describe('delegated node actions', () => {
     beforeEach(() => {
       nodesById.mockImplementation((state, action) => ('mocked return value'));
+      markings.mockImplementation((state, action) => ('mocked return value of markings'));
     });
 
     it('should delegate ADD_NODE', () => {
       const stateBefore = {
         id: 0,
         nodesById: {},
+        markings: [],
       };
       const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
       const stateAfter = {
         id: 0,
-        nodesById: 'mocked return value'
+        nodesById: 'mocked return value',
+        markings: 'mocked return value of markings',
       };
 
       expect(petriNet(stateBefore, action)).toEqual(stateAfter);

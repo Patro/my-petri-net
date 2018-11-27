@@ -1,7 +1,12 @@
-import { SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS } from '../actions';
+import { ADD_NODE, SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS } from '../actions';
 
 const markings = (state = [{}], action) => {
   switch(action.type) {
+    case ADD_NODE:
+      return state.map(marking => ({
+        ...marking,
+        [action.nodeId]: 0,
+      }));
     case SET_INITIAL_NUMBER_OF_TOKENS: {
       let next = [...state];
       next[0] = {

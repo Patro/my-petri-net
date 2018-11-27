@@ -18,6 +18,11 @@ const petriNet = (state, action) => {
         edgesById: edgesById(state['edgesById'], action),
       };
     case ADD_NODE:
+      return {
+        ...state,
+        nodesById: nodesById(state['nodesById'], action),
+        markings: markings(state['markings'], action),
+      };
     case MOVE_NODE:
     case REMOVE_NODE:
     case SET_CAPACITY_LIMIT:
