@@ -16,7 +16,7 @@ const petriNet = (state, action) => {
       return {
         ...state,
         edgesById: edgesById(state['edgesById'], action),
-      }
+      };
     case ADD_NODE:
     case MOVE_NODE:
     case REMOVE_NODE:

@@ -16,7 +16,7 @@ const petriNetsByIds = (state = initialState, action) => {
         [action.petriNetId]: {
           id: action.petriNetId,
           name: action.name
-        }
+        },
       };
     case ADD_EDGE:
     case SET_WEIGHT:
