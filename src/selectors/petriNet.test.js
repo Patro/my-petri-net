@@ -1,4 +1,7 @@
-import { getIncomingEdges, getOutgoingEdges, getNumberOfTokens } from './petriNet';
+import {
+  getIncomingEdges, getOutgoingEdges,
+  getNumberOfTokens, getActiveTransitions,
+} from './petriNet';
 import * as nodeTypes from '../constants/nodeTypes';
 
 describe('get incoming edges', () => {
@@ -246,5 +249,233 @@ describe('get number of tokens', () => {
     };
 
     expect(getNumberOfTokens(state, 0)).toEqual(4);
+  });
+});
+
+describe('get active transitions', () => {
+  it ('with no edges', () => {
+    const state = {
+      id: 0,
+      edgesById: {},
+      nodesById: {
+        0: {
+          id: 0,
+          type: nodeTypes.TRANSITION,
+        },
+      },
+      markings: [{}],
+    };
+    const activeTransitions = [state.nodesById[0]];
+
+    expect(getActiveTransitions(state)).toEqual(activeTransitions);
+  });
+
+  describe('with incoming edge', () => {
+    it('number of tokens matches weight', () => {
+      const state = {
+        id: 0,
+        edgesById: {
+          '0-1': {
+            id: '0-1',
+            from: '0',
+            to: '1',
+            weight: 1,
+          },
+        },
+        nodesById: {
+          0: {
+            id: 0,
+            type: nodeTypes.PLACE,
+          },
+          1: {
+            id: 1,
+            type: nodeTypes.TRANSITION,
+          },
+        },
+        markings: [
+          {
+            0: 1,
+          },
+        ],
+      };
+      const activeTransitions = [state.nodesById[1]];
+
+      expect(getActiveTransitions(state)).toEqual(activeTransitions);
+    });
+
+    it('weight exceeds number of tokens', () => {
+      const state = {
+        id: 0,
+        edgesById: {
+          '0-1': {
+            id: '0-1',
+            from: '0',
+            to: '1',
+            weight: 2,
+          },
+        },
+        nodesById: {
+          0: {
+            id: 0,
+            type: nodeTypes.PLACE,
+          },
+          1: {
+            id: 1,
+            type: nodeTypes.TRANSITION,
+          },
+        },
+        markings: [
+          {
+            0: 1,
+          },
+        ],
+      };
+      const activeTransitions = [];
+
+      expect(getActiveTransitions(state)).toEqual(activeTransitions);
+    });
+  });
+
+  describe('with outgoing edge', () => {
+    it('without capacity limit', () => {
+      const state = {
+        id: 0,
+        edgesById: {
+          '1-0': {
+            id: '1-0',
+            from: '1',
+            to: '0',
+            weight: 1,
+          },
+        },
+        nodesById: {
+          0: {
+            id: 0,
+            type: nodeTypes.PLACE,
+          },
+          1: {
+            id: 1,
+            type: nodeTypes.TRANSITION,
+          },
+        },
+        markings: [
+          {
+            0: 0,
+          },
+        ],
+      };
+      const activeTransitions = [state.nodesById[1]];
+
+      expect(getActiveTransitions(state)).toEqual(activeTransitions);
+    });
+
+    it('with sufficient capacity', () => {
+      const state = {
+        id: 0,
+        edgesById: {
+          '1-0': {
+            id: '1-0',
+            from: '1',
+            to: '0',
+            weight: 2,
+          },
+        },
+        nodesById: {
+          0: {
+            id: 0,
+            type: nodeTypes.PLACE,
+            capacityLimit: 4,
+          },
+          1: {
+            id: 1,
+            type: nodeTypes.TRANSITION,
+          },
+        },
+        markings: [
+          {
+            0: 2,
+          },
+        ],
+      };
+      const activeTransitions = [state.nodesById[1]];
+
+      expect(getActiveTransitions(state)).toEqual(activeTransitions);
+    });
+
+    it('with unavailable capacity', () => {
+      const state = {
+        id: 0,
+        edgesById: {
+          '1-0': {
+            id: '1-0',
+            from: '1',
+            to: '0',
+            weight: 2,
+          },
+        },
+        nodesById: {
+          0: {
+            id: 0,
+            type: nodeTypes.PLACE,
+            capacityLimit: 3,
+          },
+          1: {
+            id: 1,
+            type: nodeTypes.TRANSITION,
+          },
+        },
+        markings: [
+          {
+            0: 2,
+          },
+        ],
+      };
+      const activeTransitions = [];
+
+      expect(getActiveTransitions(state)).toEqual(activeTransitions);
+    });
+  });
+
+  it('with incoming and outgoing edges', () => {
+    const state = {
+      id: 0,
+      edgesById: {
+        '0-1': {
+          id: '0-1',
+          from: '0',
+          to: '1',
+          weight: 1,
+        },
+        '1-2': {
+          id: '1-2',
+          from: '1',
+          to: '2',
+          weight: 1,
+        },
+      },
+      nodesById: {
+        0: {
+          id: 0,
+          type: nodeTypes.PLACE,
+        },
+        1: {
+          id: 1,
+          type: nodeTypes.TRANSITION,
+        },
+        2: {
+          id: 2,
+          type: nodeTypes.PLACE,
+        },
+      },
+      markings: [
+        {
+          0: 1,
+          2: 0,
+        },
+      ],
+    };
+    const activeTransitions = [state.nodesById[1]];
+
+    expect(getActiveTransitions(state)).toEqual(activeTransitions);
   });
 });
