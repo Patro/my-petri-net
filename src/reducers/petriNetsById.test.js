@@ -1,12 +1,6 @@
 import petriNetsById from './petriNetsById';
 import petriNet from './petriNet';
-import {
-  addPetriNet, addEdge, setWeight, removeEdge,
-  addNode, moveNode, removeNode,
-  setCapacityLimit, removeCapacityLimit,
-  setInitialNumberOfTokens, resetMarkings,
-} from '../actions';
-import * as nodeTypes from '../constants/nodeTypes';
+import { addPetriNet, addEdge } from '../actions';
 
 jest.mock('./petriNet');
 
@@ -31,12 +25,12 @@ describe('petri nets by id reducer', () => {
     expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
   });
 
-  describe('delegated petri net actions', () => {
+  describe('petri net actions', () => {
     beforeEach(() => {
       petriNet.mockImplementation((state, action) => ('mocked return value'));
     });
 
-    it('should delegate ADD_EDGE', () => {
+    it('should delegate petri net actions to petri net reducer', () => {
       const stateBefore = {
         0: {
           id: 0,
@@ -56,7 +50,7 @@ describe('petri nets by id reducer', () => {
       expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
     });
 
-    it('should delegate SET_WEIGHT', () => {
+    it('should return existing state if petri net id is undefined', () => {
       const stateBefore = {
         0: {
           id: 0,
@@ -65,18 +59,12 @@ describe('petri nets by id reducer', () => {
           id: 1,
         },
       };
-      const action = setWeight(0, 1, 2);
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
+      const action = addEdge(undefined, 1, 2);
 
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
+      expect(petriNetsById(stateBefore, action)).toBe(stateBefore);
     });
 
-    it('should delegate REMOVE_EDGE', () => {
+    it('should return existing state if petri net reducer is returning the existing state', () => {
       const stateBefore = {
         0: {
           id: 0,
@@ -85,155 +73,10 @@ describe('petri nets by id reducer', () => {
           id: 1,
         },
       };
-      const action = removeEdge(0, 1);
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
+      petriNet.mockImplementation((state, action) => stateBefore[0]);
+      const action = addEdge(0, 1, 2);
 
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
-    });
-
-    it('should delegate ADD_NODE', () => {
-      const stateBefore = {
-        0: {
-          id: 0,
-        },
-        1: {
-          id: 1,
-        },
-      };
-      const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
-
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
-    });
-
-    it('should delegate MOVE_NODE', () => {
-      const stateBefore = {
-        0: {
-          id: 0,
-        },
-        1: {
-          id: 1,
-        },
-      };
-      const action = moveNode(0, 1, {x: 200, y: 400});
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
-
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
-    });
-
-    it('should delegate REMOVE_NODE', () => {
-      const stateBefore = {
-        0: {
-          id: 0,
-        },
-        1: {
-          id: 1,
-        },
-      };
-      const action = removeNode(0, 1);
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
-
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
-    });
-
-    it('should delegate SET_CAPACITY_LIMIT', () => {
-      const stateBefore = {
-        0: {
-          id: 0,
-        },
-        1: {
-          id: 1,
-        },
-      };
-      const action = setCapacityLimit(0, 1, 2);
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
-
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
-    });
-
-    it('should delegate REMOVE_CAPACITY_LIMIT', () => {
-      const stateBefore = {
-        0: {
-          id: 0,
-        },
-        1: {
-          id: 1,
-        },
-      };
-      const action = removeCapacityLimit(0, 1, 2);
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
-
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
-    });
-
-    it('should delegate SET_INITIAL_NUMBER_OF_TOKENS', () => {
-      const stateBefore = {
-        0: {
-          id: 0,
-        },
-        1: {
-          id: 1,
-        },
-      };
-      const action = setInitialNumberOfTokens(0, 1, 2);
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
-
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
-    });
-
-    it('should delegate RESET_MARKINGS', () => {
-      const stateBefore = {
-        0: {
-          id: 0,
-        },
-        1: {
-          id: 1,
-        },
-      };
-      const action = resetMarkings(0);
-      const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
-        },
-      };
-
-      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
+      expect(petriNetsById(stateBefore, action)).toBe(stateBefore);
     });
   });
 });
