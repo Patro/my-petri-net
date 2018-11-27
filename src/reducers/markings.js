@@ -1,4 +1,7 @@
-import { ADD_NODE, SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS } from '../actions';
+import {
+  ADD_NODE, REMOVE_NODE,
+  SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS
+} from '../actions';
 
 const markings = (state = [{}], action) => {
   switch(action.type) {
@@ -7,6 +10,12 @@ const markings = (state = [{}], action) => {
         ...marking,
         [action.nodeId]: 0,
       }));
+    case REMOVE_NODE:
+      return state.map(marking => {
+        let mapped = { ...marking };
+        delete(mapped[action.nodeId]);
+        return mapped;
+      });
     case SET_INITIAL_NUMBER_OF_TOKENS: {
       let next = [...state];
       next[0] = {

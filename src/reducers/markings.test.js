@@ -1,5 +1,8 @@
 import markings from './markings';
-import { addNode, setInitialNumberOfTokens, resetMarkings } from '../actions';
+import {
+  addNode, removeNode,
+  setInitialNumberOfTokens, resetMarkings,
+} from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
 describe('markings reducer', () => {
@@ -43,6 +46,43 @@ describe('markings reducer', () => {
 
       expect(markings(stateBefore, action)).toEqual(stateAfter);
     });
+  });
+
+  it('should handle REMOVE_NODE', () => {
+    const stateBefore = [
+      {
+        0: 1,
+        1: 5,
+        2: 1,
+      },
+      {
+        0: 3,
+        1: 2,
+        2: 6,
+      },
+      {
+        0: 5,
+        1: 1,
+        2: 0,
+      },
+    ];
+    const action = removeNode(0, 1);
+    const stateAfter = [
+      {
+        0: 1,
+        2: 1,
+      },
+      {
+        0: 3,
+        2: 6,
+      },
+      {
+        0: 5,
+        2: 0,
+      },
+    ];
+
+    expect(markings(stateBefore, action)).toEqual(stateAfter);
   });
 
   describe('should handle ADD_INITIAL_NUMBER_OF_TOKENS', () => {

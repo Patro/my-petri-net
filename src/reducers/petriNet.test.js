@@ -103,11 +103,13 @@ describe('petri net reducer', () => {
       const stateBefore = {
         id: 0,
         nodesById: {},
+        markings: [],
       };
       const action = removeNode(0, 1);
       const stateAfter = {
         id: 0,
-        nodesById: 'mocked return value'
+        nodesById: 'mocked return value',
+        markings: 'mocked return value of markings',
       };
 
       expect(petriNet(stateBefore, action)).toEqual(stateAfter);
