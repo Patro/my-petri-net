@@ -7,6 +7,7 @@ export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const ADD_NODE = 'ADD_NODE';
 export const MOVE_NODE = 'MOVE_NODE';
 export const SET_CAPACITY_LIMIT = 'SET_CAPACITY_LIMIT';
+export const REMOVE_CAPACITY_LIMIT = 'REMOVE_CAPACITY_LIMIT';
 
 export const addPetriNet = name => ({
   type: ADD_PETRI_NET,
@@ -55,4 +56,10 @@ export const setCapacityLimit = (petriNetId, placeId, capacityLimit) => ({
   petriNetId,
   placeId,
   capacityLimit,
+});
+
+export const removeCapacityLimit = (petriNetId, placeId) => ({
+  type: REMOVE_CAPACITY_LIMIT,
+  petriNetId,
+  placeId,
 });

@@ -1,7 +1,7 @@
 import petriNet from './petriNet';
 import {
   ADD_PETRI_NET, ADD_EDGE, SET_WEIGHT, REMOVE_EDGE,
-  ADD_NODE, MOVE_NODE, SET_CAPACITY_LIMIT,
+  ADD_NODE, MOVE_NODE, SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT,
 } from '../actions';
 
 const initialState = {};
@@ -22,6 +22,7 @@ const petriNetsByIds = (state = initialState, action) => {
     case ADD_NODE:
     case MOVE_NODE:
     case SET_CAPACITY_LIMIT:
+    case REMOVE_CAPACITY_LIMIT:
       return {
         ...state,
         [action.petriNetId]: petriNet(state[action.petriNetId], action),

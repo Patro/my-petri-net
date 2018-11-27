@@ -2,7 +2,7 @@ import petriNetsById from './petriNetsById';
 import petriNet from './petriNet';
 import {
   addPetriNet, addEdge, setWeight, removeEdge,
-  addNode, moveNode, setCapacityLimit,
+  addNode, moveNode, setCapacityLimit, removeCapacityLimit,
 } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
@@ -144,6 +144,26 @@ describe('petri nets by id reducer', () => {
         },
       };
       const action = setCapacityLimit(0, 1, 2);
+      const stateAfter = {
+        0: 'mocked return value',
+        1: {
+          id: 1,
+        },
+      };
+
+      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should delegate REMOVE_CAPACITY_LIMIT', () => {
+      const stateBefore = {
+        0: {
+          id: 0,
+        },
+        1: {
+          id: 1,
+        },
+      };
+      const action = removeCapacityLimit(0, 1, 2);
       const stateAfter = {
         0: 'mocked return value',
         1: {

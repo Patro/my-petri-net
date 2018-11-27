@@ -1,4 +1,4 @@
-import { ADD_NODE, MOVE_NODE, SET_CAPACITY_LIMIT } from '../actions';
+import { ADD_NODE, MOVE_NODE, SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT } from '../actions';
 
 const nodesById = (state = {}, action) => {
   switch(action.type) {
@@ -27,6 +27,10 @@ const nodesById = (state = {}, action) => {
           capacityLimit: action.capacityLimit,
         },
       };
+    case REMOVE_CAPACITY_LIMIT:
+      let next = { ...state };
+      delete(next[action.placeId].capacityLimit);
+      return next;
     default:
       return state;
   };
