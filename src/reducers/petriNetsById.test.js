@@ -4,6 +4,7 @@ import {
   addPetriNet, addEdge, setWeight, removeEdge,
   addNode, moveNode, removeNode,
   setCapacityLimit, removeCapacityLimit,
+  setInitialNumberOfTokens,
 } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
@@ -185,6 +186,26 @@ describe('petri nets by id reducer', () => {
         },
       };
       const action = removeCapacityLimit(0, 1, 2);
+      const stateAfter = {
+        0: 'mocked return value',
+        1: {
+          id: 1,
+        },
+      };
+
+      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should delegate SET_INITIAL_NUMBER_OF_TOKENS', () => {
+      const stateBefore = {
+        0: {
+          id: 0,
+        },
+        1: {
+          id: 1,
+        },
+      };
+      const action = setInitialNumberOfTokens(0, 1, 2);
       const stateAfter = {
         0: 'mocked return value',
         1: {

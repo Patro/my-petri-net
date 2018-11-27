@@ -1,15 +1,18 @@
 import petriNet from './petriNet';
 import edgesById from './edgesById';
 import nodesById from './nodesById';
+import markings from './markings';
 import {
   addEdge, setWeight, removeEdge,
   addNode, moveNode, removeNode,
   setCapacityLimit, removeCapacityLimit,
+  setInitialNumberOfTokens,
 } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
 jest.mock('./edgesById');
 jest.mock('./nodesById');
+jest.mock('./markings');
 
 describe('petri net reducer', () => {
   describe('delegated edge actions', () => {
@@ -130,6 +133,25 @@ describe('petri net reducer', () => {
       const stateAfter = {
         id: 0,
         nodesById: 'mocked return value'
+      };
+
+      expect(petriNet(stateBefore, action)).toEqual(stateAfter);
+    });
+  });
+
+  describe('delegated marking actions', () => {
+    beforeEach(() => {
+      markings.mockImplementation((state, action) => ('mocked return value'));
+    });
+
+    it('should delegate SET_INITIAL_NUMBER_OF_TOKENS', () => {
+      const stateBefore = {
+        id: 0,
+      };
+      const action = setInitialNumberOfTokens(0, 1, 3);
+      const stateAfter = {
+        id: 0,
+        markings: 'mocked return value'
       };
 
       expect(petriNet(stateBefore, action)).toEqual(stateAfter);
