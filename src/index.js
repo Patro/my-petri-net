@@ -5,10 +5,11 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import App from './components/App';
 import rootReducer from './reducers';
+import inititalState from './initialState';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, inititalState);
 
 ReactDOM.render(
   <Provider store={store}>
