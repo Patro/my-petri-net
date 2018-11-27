@@ -6,13 +6,15 @@ import { mount } from 'enzyme';
 import rootReducer from './../reducers';
 import App from './App';
 
-it('renders without crashing', () => {
-  const store = createStore(rootReducer);
-  mount(
-    <Provider store={store}>
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
-    </Provider>
-  );
+describe('App', () => {
+  it('should render without crashing', () => {
+    const store = createStore(rootReducer);
+    mount(
+      <Provider store={store}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </Provider>
+    );
+  });
 });

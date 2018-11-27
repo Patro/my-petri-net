@@ -1,4 +1,5 @@
 @import '~antd/dist/antd.css';
 
-.App {
+.outer_layout {
+  min-height: 100vh;
 }
