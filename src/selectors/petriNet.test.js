@@ -1,4 +1,4 @@
-import { getIncomingEdges, getOutgoingEdges } from './petriNet';
+import { getIncomingEdges, getOutgoingEdges, getNumberOfTokens } from './petriNet';
 import * as nodeTypes from '../constants/nodeTypes';
 
 describe('get incoming edges', () => {
@@ -192,5 +192,59 @@ describe('get outgoing edges', () => {
     const edges = [state.edgesById['1-0'], state.edgesById['1-2']];
 
     expect(getOutgoingEdges(state, 1)).toEqual(edges);
+  });
+});
+
+describe('get number of tokens', () => {
+  it('with one marking', () => {
+    const state = {
+      id: 0,
+      nodesById: {
+        0: {
+          id: 0,
+          type: nodeTypes.PLACE,
+        },
+        1: {
+          id: 1,
+          type: nodeTypes.PLACE,
+        },
+      },
+      markings: [
+        {
+          0: 1,
+          1: 3,
+        }
+      ],
+    };
+
+    expect(getNumberOfTokens(state, 0)).toEqual(1);
+  });
+
+  it('with two marking', () => {
+    const state = {
+      id: 0,
+      nodesById: {
+        0: {
+          id: 0,
+          type: nodeTypes.PLACE,
+        },
+        1: {
+          id: 1,
+          type: nodeTypes.PLACE,
+        },
+      },
+      markings: [
+        {
+          0: 1,
+          1: 3,
+        },
+        {
+          0: 4,
+          1: 5,
+        },
+      ],
+    };
+
+    expect(getNumberOfTokens(state, 0)).toEqual(4);
   });
 });
