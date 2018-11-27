@@ -1,5 +1,5 @@
 import markings from './markings';
-import { setInitialNumberOfTokens } from '../actions';
+import { setInitialNumberOfTokens, resetMarkings } from '../actions';
 
 describe('markings reducer', () => {
   describe('should handle ADD_INITIAL_NUMBER_OF_TOKENS', () => {
@@ -40,5 +40,31 @@ describe('markings reducer', () => {
 
       expect(markings(stateBefore, action)).toEqual(stateAfter);
     });
+  });
+
+  it('should handle RESET_MARKINGS', () => {
+    const stateBefore = [
+      {
+        0: 1,
+        1: 5,
+      },
+      {
+        0: 3,
+        1: 2,
+      },
+      {
+        0: 5,
+        1: 1,
+      },
+    ];
+    const action = resetMarkings(0);
+    const stateAfter = [
+      {
+        0: 1,
+        1: 5,
+      },
+    ];
+
+    expect(markings(stateBefore, action)).toEqual(stateAfter);
   });
 });

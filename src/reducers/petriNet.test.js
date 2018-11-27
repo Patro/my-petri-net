@@ -6,7 +6,7 @@ import {
   addEdge, setWeight, removeEdge,
   addNode, moveNode, removeNode,
   setCapacityLimit, removeCapacityLimit,
-  setInitialNumberOfTokens,
+  setInitialNumberOfTokens, resetMarkings,
 } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
@@ -149,6 +149,19 @@ describe('petri net reducer', () => {
         id: 0,
       };
       const action = setInitialNumberOfTokens(0, 1, 3);
+      const stateAfter = {
+        id: 0,
+        markings: 'mocked return value'
+      };
+
+      expect(petriNet(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should delegate RESET_MARKINGS', () => {
+      const stateBefore = {
+        id: 0,
+      };
+      const action = resetMarkings(0);
       const stateAfter = {
         id: 0,
         markings: 'mocked return value'

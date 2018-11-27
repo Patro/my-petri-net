@@ -2,7 +2,7 @@ import {
   ADD_EDGE, SET_WEIGHT, REMOVE_EDGE,
   ADD_NODE, MOVE_NODE, REMOVE_NODE,
   SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT,
-  SET_INITIAL_NUMBER_OF_TOKENS,
+  SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS,
 } from '../actions';
 import edgesById from './edgesById';
 import nodesById from './nodesById';
@@ -27,6 +27,7 @@ const petriNet = (state, action) => {
         nodesById: nodesById(state['nodesById'], action),
       };
     case SET_INITIAL_NUMBER_OF_TOKENS:
+    case RESET_MARKINGS:
       return {
         ...state,
         markings: markings(state['markings'], action),

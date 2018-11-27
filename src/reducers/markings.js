@@ -1,4 +1,4 @@
-import { SET_INITIAL_NUMBER_OF_TOKENS } from '../actions';
+import { SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS } from '../actions';
 
 const markings = (state = [{}], action) => {
   switch(action.type) {
@@ -10,6 +10,10 @@ const markings = (state = [{}], action) => {
       };
       return next;
     }
+    case RESET_MARKINGS:
+      return [
+        state[0],
+      ]
     default:
       return state;
   };

@@ -10,6 +10,7 @@ export const REMOVE_NODE = 'REMOVE_NODE';
 export const SET_CAPACITY_LIMIT = 'SET_CAPACITY_LIMIT';
 export const REMOVE_CAPACITY_LIMIT = 'REMOVE_CAPACITY_LIMIT';
 export const SET_INITIAL_NUMBER_OF_TOKENS = 'SET_INITIAL_NUMBER_OF_TOKENS';
+export const RESET_MARKINGS = 'RESET_MARKINGS';
 
 export const addPetriNet = name => ({
   type: ADD_PETRI_NET,
@@ -77,4 +78,9 @@ export const setInitialNumberOfTokens = (petriNetId, placeId, numberOfTokens) =>
   petriNetId,
   placeId,
   numberOfTokens,
+});
+
+export const resetMarkings = (petriNetId) => ({
+  type: RESET_MARKINGS,
+  petriNetId,
 });

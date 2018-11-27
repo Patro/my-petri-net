@@ -3,7 +3,7 @@ import {
   ADD_PETRI_NET, ADD_EDGE, SET_WEIGHT, REMOVE_EDGE,
   ADD_NODE, MOVE_NODE, REMOVE_NODE,
   SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT,
-  SET_INITIAL_NUMBER_OF_TOKENS,
+  SET_INITIAL_NUMBER_OF_TOKENS, RESET_MARKINGS,
 } from '../actions';
 
 const initialState = {};
@@ -27,6 +27,7 @@ const petriNetsByIds = (state = initialState, action) => {
     case SET_CAPACITY_LIMIT:
     case REMOVE_CAPACITY_LIMIT:
     case SET_INITIAL_NUMBER_OF_TOKENS:
+    case RESET_MARKINGS:
       return {
         ...state,
         [action.petriNetId]: petriNet(state[action.petriNetId], action),
