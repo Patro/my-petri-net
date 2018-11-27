@@ -1,6 +1,7 @@
 import {
   ADD_EDGE, SET_WEIGHT, REMOVE_EDGE,
-  ADD_NODE, MOVE_NODE, SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT,
+  ADD_NODE, MOVE_NODE, REMOVE_NODE,
+  SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT,
 } from '../actions';
 import edgesById from './edgesById';
 import nodesById from './nodesById';
@@ -16,6 +17,7 @@ const petriNet = (state, action) => {
       }
     case ADD_NODE:
     case MOVE_NODE:
+    case REMOVE_NODE:
     case SET_CAPACITY_LIMIT:
     case REMOVE_CAPACITY_LIMIT:
       return {

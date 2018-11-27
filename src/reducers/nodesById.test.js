@@ -1,5 +1,8 @@
 import nodesById from './nodesById';
-import { addNode, moveNode, setCapacityLimit, removeCapacityLimit } from '../actions';
+import {
+  addNode, moveNode, removeNode,
+  setCapacityLimit, removeCapacityLimit,
+} from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
 describe('nodes by id reducer', () => {
@@ -51,6 +54,25 @@ describe('nodes by id reducer', () => {
           x: 200,
           y: 400,
         },
+      },
+    };
+
+    expect(nodesById(stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it('should handle REMOVE_NODE', () => {
+    const stateBefore = {
+      0: {
+        id: 0,
+      },
+      1: {
+        id: 1,
+      },
+    };
+    const action = removeNode(0, 1);
+    const stateAfter = {
+      0: {
+        id: 0,
       },
     };
 

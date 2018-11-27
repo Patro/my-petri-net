@@ -6,6 +6,7 @@ export const SET_WEIGHT = 'SET_WEIGHT';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const ADD_NODE = 'ADD_NODE';
 export const MOVE_NODE = 'MOVE_NODE';
+export const REMOVE_NODE = 'REMOVE_NODE';
 export const SET_CAPACITY_LIMIT = 'SET_CAPACITY_LIMIT';
 export const REMOVE_CAPACITY_LIMIT = 'REMOVE_CAPACITY_LIMIT';
 
@@ -49,6 +50,12 @@ export const moveNode = (petriNetId, nodeId, position) => ({
   petriNetId,
   nodeId,
   position,
+});
+
+export const removeNode = (petriNetId, nodeId) => ({
+  type: REMOVE_NODE,
+  petriNetId,
+  nodeId,
 });
 
 export const setCapacityLimit = (petriNetId, placeId, capacityLimit) => ({

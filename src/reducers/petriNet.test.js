@@ -3,7 +3,8 @@ import edgesById from './edgesById';
 import nodesById from './nodesById';
 import {
   addEdge, setWeight, removeEdge,
-  addNode, moveNode, setCapacityLimit, removeCapacityLimit,
+  addNode, moveNode, removeNode,
+  setCapacityLimit, removeCapacityLimit,
 } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
@@ -84,6 +85,20 @@ describe('petri net reducer', () => {
         nodesById: {},
       };
       const action = moveNode(0, 1, {x: 200, y: 400});
+      const stateAfter = {
+        id: 0,
+        nodesById: 'mocked return value'
+      };
+
+      expect(petriNet(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should delegate REMOVE_NODE', () => {
+      const stateBefore = {
+        id: 0,
+        nodesById: {},
+      };
+      const action = removeNode(0, 1);
       const stateAfter = {
         id: 0,
         nodesById: 'mocked return value'
