@@ -1,4 +1,4 @@
-import { ADD_EDGE } from '../actions';
+import { ADD_EDGE, SET_WEIGHT } from '../actions';
 
 const edgesById = (state = {}, action) => {
   switch(action.type) {
@@ -10,6 +10,14 @@ const edgesById = (state = {}, action) => {
           from: action.from,
           to: action.to,
           weight: 1,
+        },
+      };
+    case SET_WEIGHT:
+      return {
+        ...state,
+        [action.edgeId]: {
+          ...state[action.edgeId],
+          weight: action.weight,
         },
       };
     default:

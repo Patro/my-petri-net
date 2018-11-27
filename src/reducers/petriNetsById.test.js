@@ -1,6 +1,6 @@
 import petriNetsById from './petriNetsById';
 import petriNet from './petriNet';
-import { addPetriNet, addEdge } from '../actions';
+import { addPetriNet, addEdge, setWeight } from '../actions';
 
 jest.mock('./petriNet');
 
@@ -40,6 +40,26 @@ describe('petri nets by id reducer', () => {
         },
       };
       const action = addEdge(0, 1, 2);
+      const stateAfter = {
+        0: 'mocked return value',
+        1: {
+          id: 1,
+        },
+      };
+
+      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should delegate SET_WEIGHT', () => {
+      const stateBefore = {
+        0: {
+          id: 0,
+        },
+        1: {
+          id: 1,
+        },
+      };
+      const action = setWeight(0, 1, 2);
       const stateAfter = {
         0: 'mocked return value',
         1: {
