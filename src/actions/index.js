@@ -5,6 +5,7 @@ export const ADD_EDGE = 'ADD_EDGE';
 export const SET_WEIGHT = 'SET_WEIGHT';
 export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const ADD_NODE = 'ADD_NODE';
+export const MOVE_NODE = 'MOVE_NODE';
 
 export const addPetriNet = name => ({
   type: ADD_PETRI_NET,
@@ -38,5 +39,12 @@ export const addNode = (petriNetId, nodeType, position) => ({
   petriNetId,
   nodeId: uuidv4(),
   nodeType,
+  position,
+});
+
+export const moveNode = (petriNetId, nodeId, position) => ({
+  type: MOVE_NODE,
+  petriNetId,
+  nodeId,
   position,
 });

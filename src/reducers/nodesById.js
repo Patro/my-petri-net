@@ -1,4 +1,4 @@
-import { ADD_NODE } from '../actions';
+import { ADD_NODE, MOVE_NODE } from '../actions';
 
 const nodesById = (state = {}, action) => {
   switch(action.type) {
@@ -8,6 +8,14 @@ const nodesById = (state = {}, action) => {
         [action.nodeId]: {
           id: action.nodeId,
           type: action.nodeType,
+          position: action.position,
+        },
+      };
+    case MOVE_NODE:
+      return {
+        ...state,
+        [action.nodeId]: {
+          ...state[action.nodeId],
           position: action.position,
         },
       };

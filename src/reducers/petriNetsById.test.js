@@ -2,7 +2,7 @@ import petriNetsById from './petriNetsById';
 import petriNet from './petriNet';
 import {
   addPetriNet, addEdge, setWeight, removeEdge,
-  addNode,
+  addNode, moveNode,
 } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
@@ -104,6 +104,26 @@ describe('petri nets by id reducer', () => {
         },
       };
       const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
+      const stateAfter = {
+        0: 'mocked return value',
+        1: {
+          id: 1,
+        },
+      };
+
+      expect(petriNetsById(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should delegate MOVE_NODE', () => {
+      const stateBefore = {
+        0: {
+          id: 0,
+        },
+        1: {
+          id: 1,
+        },
+      };
+      const action = moveNode(0, 1, {x: 200, y: 400});
       const stateAfter = {
         0: 'mocked return value',
         1: {
