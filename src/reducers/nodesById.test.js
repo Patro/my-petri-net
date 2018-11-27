@@ -1,5 +1,5 @@
 import nodesById from './nodesById';
-import { addNode, moveNode } from '../actions';
+import { addNode, moveNode, setCapacityLimit } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
 describe('nodes by id reducer', () => {
@@ -51,6 +51,29 @@ describe('nodes by id reducer', () => {
           x: 200,
           y: 400,
         },
+      },
+    };
+
+    expect(nodesById(stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it('should handle SET_CAPACITY_LIMIT', () => {
+    const stateBefore = {
+      0: {
+        id: 0,
+      },
+      1: {
+        id: 1,
+      },
+    };
+    const action = setCapacityLimit(0, 1, 5);
+    const stateAfter = {
+      0: {
+        id: 0,
+      },
+      1: {
+        id: 1,
+        capacityLimit: 5,
       },
     };
 
