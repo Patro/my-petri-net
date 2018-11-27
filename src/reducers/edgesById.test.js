@@ -1,5 +1,5 @@
 import edgesById from './edgesById';
-import { addEdge, setWeight } from '../actions';
+import { addEdge, setWeight, removeEdge } from '../actions';
 
 describe('edges by id reducer', () => {
   it('should handle ADD_EDGE', () => {
@@ -42,6 +42,25 @@ describe('edges by id reducer', () => {
       1: {
         id: 1,
         weight: 2,
+      },
+    };
+
+    expect(edgesById(stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it('should handle REMOVE_EDGE', () => {
+    const stateBefore = {
+      0: {
+        id: 0,
+      },
+      1: {
+        id: 1,
+      },
+    };
+    const action = removeEdge(0, 1);
+    const stateAfter = {
+      0: {
+        id: 0,
       },
     };
 

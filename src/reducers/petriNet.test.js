@@ -1,6 +1,6 @@
 import petriNet from './petriNet';
 import edgesById from './edgesById';
-import { addEdge, setWeight } from '../actions';
+import { addEdge, setWeight, removeEdge } from '../actions';
 
 jest.mock('./edgesById');
 
@@ -30,6 +30,20 @@ describe('petri net reducer', () => {
         edgesById: {},
       };
       const action = setWeight(0, 1, 2);
+      const stateAfter = {
+        id: 0,
+        edgesById: 'mocked return value'
+      };
+
+      expect(petriNet(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should delegate REMOVE_EDGE', () => {
+      const stateBefore = {
+        id: 0,
+        edgesById: {},
+      };
+      const action = removeEdge(0, 1);
       const stateAfter = {
         id: 0,
         edgesById: 'mocked return value'

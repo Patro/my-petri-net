@@ -1,4 +1,4 @@
-import { ADD_EDGE, SET_WEIGHT } from '../actions';
+import { ADD_EDGE, SET_WEIGHT, REMOVE_EDGE } from '../actions';
 
 const edgesById = (state = {}, action) => {
   switch(action.type) {
@@ -20,6 +20,10 @@ const edgesById = (state = {}, action) => {
           weight: action.weight,
         },
       };
+    case REMOVE_EDGE:
+      let next = {...state};
+      delete(next[action.edgeId]);
+      return next;
     default:
       return state;
   };
