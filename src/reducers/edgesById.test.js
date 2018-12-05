@@ -4,19 +4,19 @@ import { addEdge, setWeight, removeEdge } from '../actions';
 describe('edges by id reducer', () => {
   it('should handle ADD_EDGE', () => {
     const stateBefore = {
-      0: {
-        id: 0,
+      '1-2': {
+        id: '1-2',
       },
     };
-    const action = addEdge(0, 1, 2);
+    const action = addEdge(0, 3, 4);
     const stateAfter = {
-      0: {
-        id: 0,
+      '1-2': {
+        id: '1-2',
       },
-      [action.edgeId]: {
-        id: action.edgeId,
-        from: 1,
-        to: 2,
+      '3-4': {
+        id: '3-4',
+        from: 3,
+        to: 4,
         weight: 1,
       },
     };
@@ -26,21 +26,21 @@ describe('edges by id reducer', () => {
 
   it('should handle SET_WEIGHT', () => {
     const stateBefore = {
-      0: {
-        id: 0,
+      '1-2': {
+        id: '1-2',
       },
-      1: {
-        id: 1,
+      '3-4': {
+        id: '3-4',
         weight: 1,
       },
     };
-    const action = setWeight(0, 1, 2);
+    const action = setWeight(0, '3-4', 2);
     const stateAfter = {
-      0: {
-        id: 0,
+      '1-2': {
+        id: '1-2',
       },
-      1: {
-        id: 1,
+      '3-4': {
+        id: '3-4',
         weight: 2,
       },
     };
@@ -50,17 +50,17 @@ describe('edges by id reducer', () => {
 
   it('should handle REMOVE_EDGE', () => {
     const stateBefore = {
-      0: {
-        id: 0,
+      '1-2': {
+        id: '1-2',
       },
-      1: {
-        id: 1,
+      '3-4': {
+        id: '3-4',
       },
     };
-    const action = removeEdge(0, 1);
+    const action = removeEdge(0, '3-4');
     const stateAfter = {
-      0: {
-        id: 0,
+      '1-2': {
+        id: '1-2',
       },
     };
 
