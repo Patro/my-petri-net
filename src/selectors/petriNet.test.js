@@ -28,13 +28,13 @@ describe('get incoming edges', () => {
     const state = {
       id: 'petri-net-uuid',
       edgesById: {
-        'place-uuid-transition-uuid': {
-          id: 'place-uuid-transition-uuid',
+        'place-uuid_transition-uuid': {
+          id: 'place-uuid_transition-uuid',
           from: 'place-uuid',
           to: 'transition-uuid',
         },
-        'transition-uuid-place-uuid': {
-          id: 'transition-uuid-place-uuid',
+        'transition-uuid_place-uuid': {
+          id: 'transition-uuid_place-uuid',
           from: 'transition-uuid',
           to: 'place-uuid',
         },
@@ -50,7 +50,7 @@ describe('get incoming edges', () => {
         },
       },
     };
-    const edges = [state.edgesById['place-uuid-transition-uuid']];
+    const edges = [state.edgesById['place-uuid_transition-uuid']];
 
     expect(getIncomingEdges(state, 'transition-uuid')).toEqual(edges);
   });
@@ -59,23 +59,23 @@ describe('get incoming edges', () => {
     const state = {
       id: 'petri-net-uuid',
       edgesById: {
-        'place-uuid-1-transition-uuid': {
-          id: 'place-uuid-1-transition-uuid',
+        'place-uuid-1_transition-uuid': {
+          id: 'place-uuid-1_transition-uuid',
           from: 'place-uuid-1',
           to: 'transition-uuid',
         },
-        'transition-uuid-place-uuid-1': {
-          id: 'transition-uuid-place-uuid-1',
+        'transition-uuid_place-uuid-1': {
+          id: 'transition-uuid_place-uuid-1',
           from: 'transition-uuid',
           to: 'place-uuid-1',
         },
-        'place-uuid-2-transition-uuid': {
-          id: 'place-uuid-2-transition-uuid',
+        'place-uuid-2_transition-uuid': {
+          id: 'place-uuid-2_transition-uuid',
           from: 'place-uuid-2',
           to: 'transition-uuid',
         },
-        'transition-uuid-place-uuid-2': {
-          id: 'transition-uuid-place-uuid-2',
+        'transition-uuid_place-uuid-2': {
+          id: 'transition-uuid_place-uuid-2',
           from: 'transition-uuid',
           to: 'place-uuid-2',
         },
@@ -95,7 +95,7 @@ describe('get incoming edges', () => {
         },
       },
     };
-    const edges = [state.edgesById['place-uuid-1-transition-uuid'], state.edgesById['place-uuid-2-transition-uuid']];
+    const edges = [state.edgesById['place-uuid-1_transition-uuid'], state.edgesById['place-uuid-2_transition-uuid']];
 
     expect(getIncomingEdges(state, 'transition-uuid')).toEqual(edges);
   });
@@ -125,13 +125,13 @@ describe('get outgoing edges', () => {
     const state = {
       id: 'petri-net-uuid',
       edgesById: {
-        'place-uuid-transition-uuid': {
-          id: 'place-uuid-transition-uuid',
+        'place-uuid_transition-uuid': {
+          id: 'place-uuid_transition-uuid',
           from: 'place-uuid',
           to: 'transition-uuid',
         },
-        'transition-uuid-place-uuid': {
-          id: 'transition-uuid-place-uuid',
+        'transition-uuid_place-uuid': {
+          id: 'transition-uuid_place-uuid',
           from: 'transition-uuid',
           to: 'place-uuid',
         },
@@ -147,7 +147,7 @@ describe('get outgoing edges', () => {
         },
       },
     };
-    const edges = [state.edgesById['transition-uuid-place-uuid']];
+    const edges = [state.edgesById['transition-uuid_place-uuid']];
 
     expect(getOutgoingEdges(state, 'transition-uuid')).toEqual(edges);
   });
@@ -156,23 +156,23 @@ describe('get outgoing edges', () => {
     const state = {
       id: 'petri-net-uuid',
       edgesById: {
-        'place-uuid-1-transition-uuid': {
-          id: 'place-uuid-1-transition-uuid',
+        'place-uuid-1_transition-uuid': {
+          id: 'place-uuid-1_transition-uuid',
           from: 'place-uuid-1',
           to: 'transition-uuid',
         },
-        'transition-uuid-place-uuid-1': {
-          id: 'transition-uuid-place-uuid-1',
+        'transition-uuid_place-uuid-1': {
+          id: 'transition-uuid_place-uuid-1',
           from: 'transition-uuid',
           to: 'place-uuid-1',
         },
-        'place-uuid-2-transition-uuid': {
-          id: 'place-uuid-2-transition-uuid',
+        'place-uuid-2_transition-uuid': {
+          id: 'place-uuid-2_transition-uuid',
           from: 'place-uuid-2',
           to: 'transition-uuid',
         },
-        'transition-uuid-place-uuid-2': {
-          id: 'transition-uuid-place-uuid-2',
+        'transition-uuid_place-uuid-2': {
+          id: 'transition-uuid_place-uuid-2',
           from: 'transition-uuid',
           to: 'place-uuid-2',
         },
@@ -192,7 +192,7 @@ describe('get outgoing edges', () => {
         },
       },
     };
-    const edges = [state.edgesById['transition-uuid-place-uuid-1'], state.edgesById['transition-uuid-place-uuid-2']];
+    const edges = [state.edgesById['transition-uuid_place-uuid-1'], state.edgesById['transition-uuid_place-uuid-2']];
 
     expect(getOutgoingEdges(state, 'transition-uuid')).toEqual(edges);
   });
@@ -275,8 +275,8 @@ describe('get active transitions', () => {
       const state = {
         id: 'petri-net-uuid',
         edgesById: {
-          'place-uuid-transition-uuid': {
-            id: 'place-uuid-transition-uuid',
+          'place-uuid_transition-uuid': {
+            id: 'place-uuid_transition-uuid',
             from: 'place-uuid',
             to: 'transition-uuid',
             weight: 1,
@@ -307,8 +307,8 @@ describe('get active transitions', () => {
       const state = {
         id: 'petri-net-uuid',
         edgesById: {
-          'place-uuid-transition-uuid': {
-            id: 'place-uuid-transition-uuid',
+          'place-uuid_transition-uuid': {
+            id: 'place-uuid_transition-uuid',
             from: 'place-uuid',
             to: 'transition-uuid',
             weight: 2,
@@ -341,8 +341,8 @@ describe('get active transitions', () => {
       const state = {
         id: 'petri-net-uuid',
         edgesById: {
-          'transition-uuid-place-uuid': {
-            id: 'transition-uuid-place-uuid',
+          'transition-uuid_place-uuid': {
+            id: 'transition-uuid_place-uuid',
             from: 'transition-uuid',
             to: 'place-uuid',
             weight: 2,
@@ -373,8 +373,8 @@ describe('get active transitions', () => {
       const state = {
         id: 'petri-net-uuid',
         edgesById: {
-          'transition-uuid-place-uuid': {
-            id: 'transition-uuid-place-uuid',
+          'transition-uuid_place-uuid': {
+            id: 'transition-uuid_place-uuid',
             from: 'transition-uuid',
             to: 'place-uuid',
             weight: 2,
@@ -406,8 +406,8 @@ describe('get active transitions', () => {
       const state = {
         id: 'petri-net-uuid',
         edgesById: {
-          'transition-uuid-place-uuid': {
-            id: 'transition-uuid-place-uuid',
+          'transition-uuid_place-uuid': {
+            id: 'transition-uuid_place-uuid',
             from: 'transition-uuid',
             to: 'place-uuid',
             weight: 2,
@@ -440,14 +440,14 @@ describe('get active transitions', () => {
     const state = {
       id: 'petri-net-uuid',
       edgesById: {
-        'place-uuid-1-transition-uuid': {
-          id: 'place-uuid-1-transition-uuid',
+        'place-uuid-1_transition-uuid': {
+          id: 'place-uuid-1_transition-uuid',
           from: 'place-uuid-1',
           to: 'transition-uuid',
           weight: 1,
         },
-        'transition-uuid-place-uuid-2': {
-          id: 'transition-uuid-place-uuid-2',
+        'transition-uuid_place-uuid-2': {
+          id: 'transition-uuid_place-uuid-2',
           from: 'transition-uuid',
           to: 'place-uuid-2',
           weight: 1,

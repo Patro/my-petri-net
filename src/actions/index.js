@@ -22,7 +22,7 @@ export const addPetriNet = name => ({
 export const addEdge = (petriNetId, from, to) => ({
   type: ADD_EDGE,
   petriNetId,
-  edgeId: `${from}-${to}`,
+  edgeId: `${from}_${to}`,
   from,
   to,
 });

@@ -43,8 +43,8 @@ describe('petri net reducer', () => {
       const stateBefore = {
         id: 'petri-net-uuid',
         edgesById: {
-          'place-uuid-transition-uuid': {
-            id: 'place-uuid-transition-uuid',
+          'place-uuid_transition-uuid': {
+            id: 'place-uuid_transition-uuid',
             from: 'place-uuid',
             to: 'transition-uuid',
             weight: 2,
@@ -70,8 +70,8 @@ describe('petri net reducer', () => {
       const stateAfter = {
         id: 'petri-net-uuid',
         edgesById: {
-          'place-uuid-transition-uuid': {
-            id: 'place-uuid-transition-uuid',
+          'place-uuid_transition-uuid': {
+            id: 'place-uuid_transition-uuid',
             from: 'place-uuid',
             to: 'transition-uuid',
             weight: 2,
@@ -104,8 +104,8 @@ describe('petri net reducer', () => {
       const stateBefore = {
         id: 'petri-net-uuid',
         edgesById: {
-          'transition-uuid-place-uuid': {
-            id: 'transition-uuid-place-uuid',
+          'transition-uuid_place-uuid': {
+            id: 'transition-uuid_place-uuid',
             from: 'transition-uuid',
             to: 'place-uuid',
             weight: 2,
@@ -131,8 +131,8 @@ describe('petri net reducer', () => {
       const stateAfter = {
         id: 'petri-net-uuid',
         edgesById: {
-          'transition-uuid-place-uuid': {
-            id: 'transition-uuid-place-uuid',
+          'transition-uuid_place-uuid': {
+            id: 'transition-uuid_place-uuid',
             from: 'transition-uuid',
             to: 'place-uuid',
             weight: 2,
