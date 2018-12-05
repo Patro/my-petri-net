@@ -10,7 +10,10 @@ const petriNetsByIds = (state = initialState, action) => {
         ...state,
         [action.petriNetId]: {
           id: action.petriNetId,
-          name: action.name
+          name: action.name,
+          edgesById: {},
+          nodesById: {},
+          markings: [{}],
         },
       };
     default: {

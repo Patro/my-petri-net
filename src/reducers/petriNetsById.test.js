@@ -19,6 +19,9 @@ describe('petri nets by id reducer', () => {
       [action.petriNetId]: {
         id: action.petriNetId,
         name: 'My Petri Net',
+        edgesById: {},
+        nodesById: {},
+        markings: [{}],
       },
     };
 
