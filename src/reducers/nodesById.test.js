@@ -6,58 +6,90 @@ import {
 import * as nodeTypes from '../constants/nodeTypes';
 
 describe('nodes by id reducer', () => {
-  it('should handle ADD_NODE', () => {
-    const stateBefore = {
-      0: {
-        id: 0,
-      },
-    };
-    const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
-    const stateAfter = {
-      0: {
-        id: 0,
-      },
-      [action.nodeId]: {
-        id: action.nodeId,
-        type: nodeTypes.TRANSITION,
-        position: {
-          x: 200,
-          y: 400,
+  describe('ADD_NODE action handling', () => {
+    it('should add node', () => {
+      const stateBefore = {
+        0: {
+          id: 0,
         },
-      },
-    };
+      };
+      const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
+      const stateAfter = {
+        0: {
+          id: 0,
+        },
+        [action.nodeId]: {
+          id: action.nodeId,
+          type: nodeTypes.TRANSITION,
+          position: {
+            x: 200,
+            y: 400,
+          },
+        },
+      };
 
-    expect(nodesById(stateBefore, action)).toEqual(stateAfter);
+      expect(nodesById(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should clone position from action', () => {
+      const stateBefore = {};
+      const position = {x: 200, y: 400};
+      const action = addNode(0, nodeTypes.TRANSITION, position);
+      const reducedState = nodesById(stateBefore, action);
+      position.x = 400;
+
+      expect(reducedState[action.nodeId].position.x).toEqual(200);
+    });
   });
 
-  it('should handle MOVE_NODE', () => {
-    const stateBefore = {
-      0: {
-        id: 0,
-      },
-      1: {
-        id: 1,
-        position: {
-          x: 100,
-          y: 200,
+  describe('MOVE_NODE action handling', () => {
+    it('should update position', () => {
+      const stateBefore = {
+        0: {
+          id: 0,
         },
-      },
-    };
-    const action = moveNode(0, 1, {x: 200, y: 400});
-    const stateAfter = {
-      0: {
-        id: 0,
-      },
-      1: {
-        id: 1,
-        position: {
-          x: 200,
-          y: 400,
+        1: {
+          id: 1,
+          position: {
+            x: 100,
+            y: 200,
+          },
         },
-      },
-    };
+      };
+      const action = moveNode(0, 1, {x: 200, y: 400});
+      const stateAfter = {
+        0: {
+          id: 0,
+        },
+        1: {
+          id: 1,
+          position: {
+            x: 200,
+            y: 400,
+          },
+        },
+      };
 
-    expect(nodesById(stateBefore, action)).toEqual(stateAfter);
+      expect(nodesById(stateBefore, action)).toEqual(stateAfter);
+    });
+
+    it('should clone position from action', () => {
+      const stateBefore = {
+        1: {
+          id: 1,
+          position: {
+            x: 100,
+            y: 200,
+          },
+        },
+      };
+      const position = {x: 200, y: 400};
+      const action = moveNode(0, 1, position);
+      const reducedState = nodesById(stateBefore, action);
+      position.x = 400;
+
+      expect(reducedState[action.nodeId].position.x).toEqual(200);
+    });
   });
 
   it('should handle REMOVE_NODE', () => {

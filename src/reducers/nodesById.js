@@ -11,7 +11,9 @@ const nodesById = (state = {}, action) => {
         [action.nodeId]: {
           id: action.nodeId,
           type: action.nodeType,
-          position: action.position,
+          position: {
+            ...action.position,
+          },
         },
       };
     case MOVE_NODE:
@@ -19,7 +21,9 @@ const nodesById = (state = {}, action) => {
         ...state,
         [action.nodeId]: {
           ...state[action.nodeId],
-          position: action.position,
+          position: {
+            ...action.position,
+          },
         },
       };
     case REMOVE_NODE: {
