@@ -1,7 +1,7 @@
 import nodesById from './nodesById';
 import {
   addNode, moveNode, removeNode,
-  setCapacityLimit, removeCapacityLimit,
+  setLabel, setCapacityLimit, removeCapacityLimit,
 } from '../actions';
 import * as nodeTypes from '../constants/nodeTypes';
 
@@ -105,6 +105,32 @@ describe('nodes by id reducer', () => {
     const stateAfter = {
       'node-uuid-1': {
         id: 'node-uuid-1',
+      },
+    };
+
+    expect(nodesById(stateBefore, action)).toEqual(stateAfter);
+  });
+
+  it('should handle SET_LABEL', () => {
+    const stateBefore = {
+      'node-uuid-1': {
+        id: 'node-uuid-1',
+        label: 'Node A',
+      },
+      'node-uuid-2': {
+        id: 'node-uuid-2',
+        label: 'Node B',
+      },
+    };
+    const action = setLabel('petri-net-uuid', 'node-uuid-2', 'New Label');
+    const stateAfter = {
+      'node-uuid-1': {
+        id: 'node-uuid-1',
+        label: 'Node A',
+      },
+      'node-uuid-2': {
+        id: 'node-uuid-2',
+        label: 'New Label',
       },
     };
 

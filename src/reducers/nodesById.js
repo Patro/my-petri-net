@@ -1,6 +1,6 @@
 import {
   ADD_NODE, MOVE_NODE, REMOVE_NODE,
-  SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT,
+  SET_LABEL, SET_CAPACITY_LIMIT, REMOVE_CAPACITY_LIMIT,
 } from '../actions';
 
 const nodesById = (state = {}, action) => {
@@ -31,6 +31,14 @@ const nodesById = (state = {}, action) => {
       delete(next[action.nodeId]);
       return next;
     }
+    case SET_LABEL:
+      return {
+        ...state,
+        [action.nodeId]: {
+          ...state[action.nodeId],
+          label: action.label,
+        },
+      };
     case SET_CAPACITY_LIMIT:
       return {
         ...state,

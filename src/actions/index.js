@@ -7,6 +7,7 @@ export const REMOVE_EDGE = 'REMOVE_EDGE';
 export const ADD_NODE = 'ADD_NODE';
 export const MOVE_NODE = 'MOVE_NODE';
 export const REMOVE_NODE = 'REMOVE_NODE';
+export const SET_LABEL = 'SET_LABEL';
 export const SET_CAPACITY_LIMIT = 'SET_CAPACITY_LIMIT';
 export const REMOVE_CAPACITY_LIMIT = 'REMOVE_CAPACITY_LIMIT';
 export const SET_INITIAL_NUMBER_OF_TOKENS = 'SET_INITIAL_NUMBER_OF_TOKENS';
@@ -59,6 +60,13 @@ export const removeNode = (petriNetId, nodeId) => ({
   type: REMOVE_NODE,
   petriNetId,
   nodeId,
+});
+
+export const setLabel = (petriNetId, nodeId, label) => ({
+  type: SET_LABEL,
+  petriNetId,
+  nodeId,
+  label,
 });
 
 export const setCapacityLimit = (petriNetId, placeId, capacityLimit) => ({
