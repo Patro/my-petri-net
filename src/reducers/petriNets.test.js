@@ -3,9 +3,9 @@ import { addPetriNet } from '../actions';
 
 describe('petri nets reducer', () => {
   it('should handle ADD_PETRI_NET', () => {
-    const stateBefore = [0];
+    const stateBefore = ['petri-net-uuid'];
     const action = addPetriNet('My Petri Net');
-    const stateAfter = [0, action.petriNetId];
+    const stateAfter = ['petri-net-uuid', action.petriNetId];
 
     expect(petriNets(stateBefore, action)).toEqual(stateAfter);
   });

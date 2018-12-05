@@ -4,19 +4,19 @@ import { addEdge, setWeight, removeEdge } from '../actions';
 describe('edges by id reducer', () => {
   it('should handle ADD_EDGE', () => {
     const stateBefore = {
-      '1-2': {
-        id: '1-2',
+      'node-uuid-1-node-uuid-2': {
+        id: 'node-uuid-1-node-uuid-2',
       },
     };
-    const action = addEdge(0, 3, 4);
+    const action = addEdge('petri-net-uuid', 'node-uuid-3', 'node-uuid-4');
     const stateAfter = {
-      '1-2': {
-        id: '1-2',
+      'node-uuid-1-node-uuid-2': {
+        id: 'node-uuid-1-node-uuid-2',
       },
-      '3-4': {
-        id: '3-4',
-        from: 3,
-        to: 4,
+      'node-uuid-3-node-uuid-4': {
+        id: 'node-uuid-3-node-uuid-4',
+        from: 'node-uuid-3',
+        to: 'node-uuid-4',
         weight: 1,
       },
     };
@@ -26,21 +26,21 @@ describe('edges by id reducer', () => {
 
   it('should handle SET_WEIGHT', () => {
     const stateBefore = {
-      '1-2': {
-        id: '1-2',
+      'node-uuid-1-node-uuid-2': {
+        id: 'node-uuid-1-node-uuid-2',
       },
-      '3-4': {
-        id: '3-4',
+      'node-uuid-3-node-uuid-4': {
+        id: 'node-uuid-3-node-uuid-4',
         weight: 1,
       },
     };
-    const action = setWeight(0, '3-4', 2);
+    const action = setWeight('petri-net-uuid', 'node-uuid-3-node-uuid-4', 2);
     const stateAfter = {
-      '1-2': {
-        id: '1-2',
+      'node-uuid-1-node-uuid-2': {
+        id: 'node-uuid-1-node-uuid-2',
       },
-      '3-4': {
-        id: '3-4',
+      'node-uuid-3-node-uuid-4': {
+        id: 'node-uuid-3-node-uuid-4',
         weight: 2,
       },
     };
@@ -50,17 +50,17 @@ describe('edges by id reducer', () => {
 
   it('should handle REMOVE_EDGE', () => {
     const stateBefore = {
-      '1-2': {
-        id: '1-2',
+      'node-uuid-1-node-uuid-2': {
+        id: 'node-uuid-1-node-uuid-2',
       },
-      '3-4': {
-        id: '3-4',
+      'node-uuid-3-node-uuid-4': {
+        id: 'node-uuid-3-node-uuid-4',
       },
     };
-    const action = removeEdge(0, '3-4');
+    const action = removeEdge('petri-net-uuid', 'node-uuid-3-node-uuid-4');
     const stateAfter = {
-      '1-2': {
-        id: '1-2',
+      'node-uuid-1-node-uuid-2': {
+        id: 'node-uuid-1-node-uuid-2',
       },
     };
 

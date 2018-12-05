@@ -10,7 +10,7 @@ describe('markings reducer', () => {
   describe('should handle ADD_NODE', () => {
     it('with undefined state', () => {
       const stateBefore = undefined;
-      const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
+      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, {x: 200, y: 400});
       const stateAfter = [
         {
           [action.nodeId]: 0,
@@ -23,24 +23,24 @@ describe('markings reducer', () => {
     it('with existing markings', () => {
       const stateBefore = [
         {
-          0: 1,
-          1: 3,
+          'place-uuid-1': 1,
+          'place-uuid-2': 3,
         },
         {
-          0: 3,
-          1: 2,
+          'place-uuid-1': 3,
+          'place-uuid-2': 2,
         }
       ];
-      const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
+      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, {x: 200, y: 400});
       const stateAfter = [
         {
-          0: 1,
-          1: 3,
+          'place-uuid-1': 1,
+          'place-uuid-2': 3,
           [action.nodeId]: 0,
         },
         {
-          0: 3,
-          1: 2,
+          'place-uuid-1': 3,
+          'place-uuid-2': 2,
           [action.nodeId]: 0,
         }
       ];
@@ -52,34 +52,34 @@ describe('markings reducer', () => {
   it('should handle REMOVE_NODE', () => {
     const stateBefore = [
       {
-        0: 1,
-        1: 5,
-        2: 1,
+        'place-uuid-1': 1,
+        'place-uuid-2': 5,
+        'place-uuid-3': 1,
       },
       {
-        0: 3,
-        1: 2,
-        2: 6,
+        'place-uuid-1': 3,
+        'place-uuid-2': 2,
+        'place-uuid-3': 6,
       },
       {
-        0: 5,
-        1: 1,
-        2: 0,
+        'place-uuid-1': 5,
+        'place-uuid-2': 1,
+        'place-uuid-3': 0,
       },
     ];
-    const action = removeNode(0, 1);
+    const action = removeNode('petri-net-uuid', 'place-uuid-2');
     const stateAfter = [
       {
-        0: 1,
-        2: 1,
+        'place-uuid-1': 1,
+        'place-uuid-3': 1,
       },
       {
-        0: 3,
-        2: 6,
+        'place-uuid-1': 3,
+        'place-uuid-3': 6,
       },
       {
-        0: 5,
-        2: 0,
+        'place-uuid-1': 5,
+        'place-uuid-3': 0,
       },
     ];
 
@@ -90,17 +90,17 @@ describe('markings reducer', () => {
     it('with number of tokens that is below limit', () => {
       const stateBefore = [
         {
-          0: 1,
-          1: 3,
-          2: 1,
+          'place-uuid-1': 1,
+          'place-uuid-2': 3,
+          'place-uuid-3': 1,
         },
       ];
-      const action = setCapacityLimit(0, 1, 4);
+      const action = setCapacityLimit('petri-net-uuid', 'place-uuid-2', 4);
       const stateAfter = [
         {
-          0: 1,
-          1: 3,
-          2: 1,
+          'place-uuid-1': 1,
+          'place-uuid-2': 3,
+          'place-uuid-3': 1,
         },
       ];
 
@@ -110,17 +110,17 @@ describe('markings reducer', () => {
     it('with number of tokens that matches limit', () => {
       const stateBefore = [
         {
-          0: 1,
-          1: 4,
-          2: 1,
+          'place-uuid-1': 1,
+          'place-uuid-2': 4,
+          'place-uuid-3': 1,
         },
       ];
-      const action = setCapacityLimit(0, 1, 4);
+      const action = setCapacityLimit('petri-net-uuid', 'place-uuid-2', 4);
       const stateAfter = [
         {
-          0: 1,
-          1: 4,
-          2: 1,
+          'place-uuid-1': 1,
+          'place-uuid-2': 4,
+          'place-uuid-3': 1,
         },
       ];
 
@@ -130,17 +130,17 @@ describe('markings reducer', () => {
     it('with number of tokens that exceeds limit', () => {
       const stateBefore = [
         {
-          0: 1,
-          1: 5,
-          2: 1,
+          'place-uuid-1': 1,
+          'place-uuid-2': 5,
+          'place-uuid-3': 1,
         },
       ];
-      const action = setCapacityLimit(0, 1, 4);
+      const action = setCapacityLimit('petri-net-uuid', 'place-uuid-2' , 4);
       const stateAfter = [
         {
-          0: 1,
-          1: 4,
-          2: 1,
+          'place-uuid-1': 1,
+          'place-uuid-2': 4,
+          'place-uuid-3': 1,
         },
       ];
 
@@ -151,10 +151,10 @@ describe('markings reducer', () => {
   describe('should handle ADD_INITIAL_NUMBER_OF_TOKENS', () => {
     it('with undefined state', () => {
       const stateBefore = undefined;
-      const action = setInitialNumberOfTokens(0, 1, 5);
+      const action = setInitialNumberOfTokens('petri-net-uuid', 'place-uuid-1', 5);
       const stateAfter = [
         {
-          1: 5,
+          'place-uuid-1': 5,
         },
       ];
 
@@ -164,23 +164,23 @@ describe('markings reducer', () => {
     it('with existing initial marking', () => {
       const stateBefore = [
         {
-          0: 1,
-          1: 3,
+          'place-uuid-1': 1,
+          'place-uuid-2': 3,
         },
         {
-          0: 3,
-          1: 2,
+          'place-uuid-1': 3,
+          'place-uuid-2': 2,
         }
       ];
-      const action = setInitialNumberOfTokens(0, 1, 5);
+      const action = setInitialNumberOfTokens('petri-net-uuid', 'place-uuid-2', 5);
       const stateAfter = [
         {
-          0: 1,
-          1: 5,
+          'place-uuid-1': 1,
+          'place-uuid-2': 5,
         },
         {
-          0: 3,
-          1: 2,
+          'place-uuid-1': 3,
+          'place-uuid-2': 2,
         }
       ];
 
@@ -191,23 +191,23 @@ describe('markings reducer', () => {
   it('should handle RESET_MARKINGS', () => {
     const stateBefore = [
       {
-        0: 1,
-        1: 5,
+        'place-uuid-1': 1,
+        'place-uuid-2': 5,
       },
       {
-        0: 3,
-        1: 2,
+        'place-uuid-1': 3,
+        'place-uuid-2': 2,
       },
       {
-        0: 5,
-        1: 1,
+        'place-uuid-1': 5,
+        'place-uuid-2': 1,
       },
     ];
     const action = resetMarkings(0);
     const stateAfter = [
       {
-        0: 1,
-        1: 5,
+        'place-uuid-1': 1,
+        'place-uuid-2': 5,
       },
     ];
 

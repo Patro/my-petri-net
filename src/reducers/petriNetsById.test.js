@@ -7,14 +7,14 @@ jest.mock('./petriNet');
 describe('petri nets by id reducer', () => {
   it('should handle ADD_PETRI_NET', () => {
     const stateBefore = {
-      0: {
-        id: 0,
+      'petri-net-uuid-1': {
+        id: 'petri-net-uuid-1',
       },
     };
     const action = addPetriNet('My Petri Net');
     const stateAfter = {
-      0: {
-        id: 0,
+      'petri-net-uuid-1': {
+        id: 'petri-net-uuid-1',
       },
       [action.petriNetId]: {
         id: action.petriNetId,
@@ -32,18 +32,18 @@ describe('petri nets by id reducer', () => {
 
     it('should delegate petri net actions to petri net reducer', () => {
       const stateBefore = {
-        0: {
-          id: 0,
+        'petri-net-uuid-1': {
+          id: 'petri-net-uuid-1',
         },
-        1: {
-          id: 1,
+        'petri-net-uuid-2': {
+          id: 'petri-net-uuid-2',
         },
       };
-      const action = addEdge(0, 1, 2);
+      const action = addEdge('petri-net-uuid-1', 'node-uuid-1', 'node-uuid-2');
       const stateAfter = {
-        0: 'mocked return value',
-        1: {
-          id: 1,
+        'petri-net-uuid-1': 'mocked return value',
+        'petri-net-uuid-2': {
+          id: 'petri-net-uuid-2',
         },
       };
 
@@ -52,29 +52,29 @@ describe('petri nets by id reducer', () => {
 
     it('should return existing state if petri net id is undefined', () => {
       const stateBefore = {
-        0: {
-          id: 0,
+        'petri-net-uuid-1': {
+          id: 'petri-net-uuid-1',
         },
-        1: {
-          id: 1,
+        'petri-net-uuid-2': {
+          id: 'petri-net-uuid-2',
         },
       };
-      const action = addEdge(undefined, 1, 2);
+      const action = addEdge(undefined, 'node-uuid-1', 'node-uuid-2');
 
       expect(petriNetsById(stateBefore, action)).toBe(stateBefore);
     });
 
     it('should return existing state if petri net reducer is returning the existing state', () => {
       const stateBefore = {
-        0: {
-          id: 0,
+        'petri-net-uuid-1': {
+          id: 'petri-net-uuid-1',
         },
-        1: {
-          id: 1,
+        'petri-net-uuid-2': {
+          id: 'petri-net-uuid-2',
         },
       };
-      petriNet.mockImplementation((state, action) => stateBefore[0]);
-      const action = addEdge(0, 1, 2);
+      petriNet.mockImplementation((state, action) => stateBefore['petri-net-uuid-1']);
+      const action = addEdge('petri-net-uuid-1', 'node-uuid-1', 'node-uuid-2');
 
       expect(petriNetsById(stateBefore, action)).toBe(stateBefore);
     });

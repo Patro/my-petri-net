@@ -9,14 +9,14 @@ describe('nodes by id reducer', () => {
   describe('ADD_NODE action handling', () => {
     it('should add node', () => {
       const stateBefore = {
-        0: {
-          id: 0,
+        'node-uuid-1': {
+          id: 'node-uuid-1',
         },
       };
-      const action = addNode(0, nodeTypes.TRANSITION, {x: 200, y: 400});
+      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, {x: 200, y: 400});
       const stateAfter = {
-        0: {
-          id: 0,
+        'node-uuid-1': {
+          id: 'node-uuid-1',
         },
         [action.nodeId]: {
           id: action.nodeId,
@@ -34,7 +34,7 @@ describe('nodes by id reducer', () => {
     it('should clone position from action', () => {
       const stateBefore = {};
       const position = {x: 200, y: 400};
-      const action = addNode(0, nodeTypes.TRANSITION, position);
+      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, position);
       const reducedState = nodesById(stateBefore, action);
       position.x = 400;
 
@@ -45,24 +45,24 @@ describe('nodes by id reducer', () => {
   describe('MOVE_NODE action handling', () => {
     it('should update position', () => {
       const stateBefore = {
-        0: {
-          id: 0,
+        'node-uuid-1': {
+          id: 'node-uuid-1',
         },
-        1: {
-          id: 1,
+        'node-uuid-2': {
+          id: 'node-uuid-2',
           position: {
             x: 100,
             y: 200,
           },
         },
       };
-      const action = moveNode(0, 1, {x: 200, y: 400});
+      const action = moveNode('petri-net-uuid', 'node-uuid-2', {x: 200, y: 400});
       const stateAfter = {
-        0: {
-          id: 0,
+        'node-uuid-1': {
+          id: 'node-uuid-1',
         },
-        1: {
-          id: 1,
+        'node-uuid-2': {
+          id: 'node-uuid-2',
           position: {
             x: 200,
             y: 400,
@@ -75,8 +75,8 @@ describe('nodes by id reducer', () => {
 
     it('should clone position from action', () => {
       const stateBefore = {
-        1: {
-          id: 1,
+        'node-uuid-1': {
+          id: 'node-uuid-1',
           position: {
             x: 100,
             y: 200,
@@ -84,7 +84,7 @@ describe('nodes by id reducer', () => {
         },
       };
       const position = {x: 200, y: 400};
-      const action = moveNode(0, 1, position);
+      const action = moveNode('petri-net-uuid', 'node-uuid-1', position);
       const reducedState = nodesById(stateBefore, action);
       position.x = 400;
 
@@ -94,17 +94,17 @@ describe('nodes by id reducer', () => {
 
   it('should handle REMOVE_NODE', () => {
     const stateBefore = {
-      0: {
-        id: 0,
+      'node-uuid-1': {
+        id: 'node-uuid-1',
       },
-      1: {
-        id: 1,
+      'node-uuid-2': {
+        id: 'node-uuid-2',
       },
     };
-    const action = removeNode(0, 1);
+    const action = removeNode('petri-net-uuid', 'node-uuid-2');
     const stateAfter = {
-      0: {
-        id: 0,
+      'node-uuid-1': {
+        id: 'node-uuid-1',
       },
     };
 
@@ -113,20 +113,20 @@ describe('nodes by id reducer', () => {
 
   it('should handle SET_CAPACITY_LIMIT', () => {
     const stateBefore = {
-      0: {
-        id: 0,
+      'node-uuid-1': {
+        id: 'node-uuid-1',
       },
-      1: {
-        id: 1,
+      'node-uuid-2': {
+        id: 'node-uuid-2',
       },
     };
-    const action = setCapacityLimit(0, 1, 5);
+    const action = setCapacityLimit('petri-net-uuid', 'node-uuid-2', 5);
     const stateAfter = {
-      0: {
-        id: 0,
+      'node-uuid-1': {
+        id: 'node-uuid-1',
       },
-      1: {
-        id: 1,
+      'node-uuid-2': {
+        id: 'node-uuid-2',
         capacityLimit: 5,
       },
     };
@@ -136,21 +136,21 @@ describe('nodes by id reducer', () => {
 
   it('should handle REMOVE_CAPACITY_LIMIT', () => {
     const stateBefore = {
-      0: {
-        id: 0,
+      'node-uuid-1': {
+        id: 'node-uuid-1',
       },
-      1: {
-        id: 1,
+      'node-uuid-2': {
+        id: 'node-uuid-2',
         capacityLimit: 3,
       },
     };
-    const action = removeCapacityLimit(0, 1);
+    const action = removeCapacityLimit('petri-net-uuid', 'node-uuid-2');
     const stateAfter = {
-      0: {
-        id: 0,
+      'node-uuid-1': {
+        id: 'node-uuid-1',
       },
-      1: {
-        id: 1,
+      'node-uuid-2': {
+        id: 'node-uuid-2',
       },
     };
 
