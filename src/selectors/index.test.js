@@ -1,4 +1,4 @@
-import { getPetriNets } from './index';
+import { getCurrentPetriNet, getPetriNet, getPetriNets } from './index';
 
 describe('get petri nets', () => {
   it('should return empty array with initial state', () => {
@@ -59,5 +59,79 @@ describe('get petri nets', () => {
 
       expect(getPetriNets(state)).toEqual(petriNets);
     });
+  });
+});
+
+describe('get petri net', () => {
+  it('should return undefined if petri net does not exist', () => {
+    const state = {
+      petriNets: [],
+      petriNetsById: {},
+    };
+    const id = 'petri-net-uuid';
+    const petriNet = undefined;
+
+    expect(getPetriNet(state, id)).toEqual(petriNet);
+  });
+
+  it('should return petri net with matching id', () => {
+    const state = {
+      petriNetsById: {
+        'petri-net-uuid': {
+          id: 'petri-net-uuid',
+          data: 'data',
+        },
+      },
+    };
+    const id = 'petri-net-uuid';
+    const petriNet = {
+      id: 'petri-net-uuid',
+      data: 'data',
+    };
+
+    expect(getPetriNet(state, id)).toEqual(petriNet);
+  });
+});
+
+describe('get current petri net', () => {
+  it('should return undefined if petri net does not exist', () => {
+    const state = {
+      petriNets: [],
+      petriNetsById: {},
+    };
+    const props = {
+      match: {
+        params: {
+          id: 'petri-net-uuid',
+        },
+      },
+    }
+    const petriNet = undefined;
+
+    expect(getCurrentPetriNet(state, props)).toEqual(petriNet);
+  });
+
+  it('should return petri net with matching id', () => {
+    const state = {
+      petriNetsById: {
+        'petri-net-uuid': {
+          id: 'petri-net-uuid',
+          data: 'data',
+        },
+      },
+    };
+    const props = {
+      match: {
+        params: {
+          id: 'petri-net-uuid',
+        },
+      },
+    }
+    const petriNet = {
+      id: 'petri-net-uuid',
+      data: 'data',
+    };
+
+    expect(getCurrentPetriNet(state, props)).toEqual(petriNet);
   });
 });
