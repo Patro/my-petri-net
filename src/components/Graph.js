@@ -11,21 +11,22 @@ class Graph extends PureComponent {
 
   componentDidMount = () => {
     this.initCytoscape();
+    this.setLoaded();
+  }
+
+  componentDidUpdate() {
+    this.updateCytoscape();
+    this.setLoaded();
   }
 
   initCytoscape() {
-    this.loaded = {
-      elementsById: this.props.elementsById,
-      layout: this.props.layout,
-      style: this.props.style,
-    }
-    this.options = {
+    const elements = Object.values(this.props.elementsById || {});
+    this.cy = cytoscape({
       container: this.cyContainerRef.current,
-      elements: cloneDeep(Object.values(this.props.elementsById || {})),
+      elements: cloneDeep(elements),
       layout: cloneDeep(this.props.layout || {}),
       style: cloneDeep(this.props.style || {}),
-    }
-    this.cy = cytoscape(this.options);
+    });
   }
 
   render = () => {
@@ -34,6 +35,31 @@ class Graph extends PureComponent {
         <StaticDiv className="cytoscape_container" divRef={this.cyContainerRef} />
       </div>
     );
+  }
+
+  setLoaded() {
+    this.loaded = {
+      elementsById: this.props.elementsById,
+      layout: this.props.layout,
+      style: this.props.style,
+    };
+  }
+
+  updateCytoscape() {
+    this.updateOptions();
+  }
+
+  updateOption(key) {
+    if (this.props[key] === this.loaded[key]) {
+      return;
+    }
+
+    this.cy[key](cloneDeep(this.props[key]));
+  }
+
+  updateOptions() {
+    const optionsToUpdate = ['layout', 'style'];
+    optionsToUpdate.map(key => this.updateOption(key));
   }
 }
 
