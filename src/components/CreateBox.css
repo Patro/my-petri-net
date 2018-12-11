@@ -1,0 +1,7 @@
+.create_box {
+  padding: 4px 4px;
+}
+
+.create_box .ant-input-affix-wrapper .ant-input-suffix {
+  right: 0 !important;
+}
