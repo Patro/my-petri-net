@@ -10,14 +10,40 @@ describe('Graph', () => {
   const getCytoscape = (wrapper) => wrapper.instance().cy;
 
   beforeEach(() => {
-    cytoscape.mockImplementation((options) => ({
-      options,
-      add: jest.fn((json) => ( options.elements.push(json) )),
-      container: jest.fn(() => ( options.container )),
-      json: jest.fn(() => ( options.elements )),
-      layout: jest.fn((layout = undefined) => ( layout ? options.layout = layout : options.layout )),
-      style: jest.fn((style = undefined) => ( style ? options.style = style : options.style)),
-    }));
+    const mockElement = (cy, params) => {
+      const el = {
+        _data: params.data,
+        id: jest.fn(() => ( el._data.id )),
+        remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
+      };
+      return el;
+    };
+    const mockCollection = (elements) => ({
+      first: () => elements[0],
+      remove: () => elements.forEach(element => element.remove()),
+    });
+    cytoscape.mockImplementation((options) => {
+      const cy = {
+        _container: options.container,
+        _json: options.elements,
+        _layout: options.layout,
+        _style: options.style,
+        add: jest.fn((json) => {
+          cy._json.push(json);
+          cy._elements.push(mockElement(cy, json));
+        }),
+        container: jest.fn(() => ( cy._container )),
+        elements: jest.fn((selector) => { // expects selector with id, e.g. #petri-net-1
+          const id = selector.substring(1);
+          return mockCollection(cy._elements.filter(el => el.id() === id));
+        }),
+        json: jest.fn(() => ( cy._json )),
+        layout: jest.fn((layout = undefined) => ( layout ? cy._layout = layout : cy._layout )),
+        style: jest.fn((style = undefined) => ( style ? cy._style = style : cy._style)),
+      };
+      cy._elements = options.elements.map(element => mockElement(cy, element));
+      return cy;
+    });
   });
 
   describe('initialization', () => {
@@ -244,6 +270,21 @@ describe('Graph', () => {
 
       const element = getCytoscape(wrapper).json()[0];
       expect(element.data.id).toEqual('element-id');
+    });
+
+    it('should remove former elements', () => {
+      const initialElements = {
+        'element-id': {
+          data: { id: 'element-id' },
+        },
+      };
+      const updatedElements = {};
+
+      const wrapper = mount(<Graph elementsById={initialElements} />);
+      const el = getCytoscape(wrapper).elements('#element-id').first();
+      wrapper.setProps({ elementsById: updatedElements });
+
+      expect(el.remove).toBeCalled();
     });
   });
 });

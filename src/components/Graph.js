@@ -34,6 +34,10 @@ class Graph extends PureComponent {
     });
   }
 
+  removeElement(params) {
+    this.cy.elements(`#${params.data.id}`).remove();
+  }
+
   render = () => {
     return (
       <div className="graph">
@@ -66,6 +70,7 @@ class Graph extends PureComponent {
       prev,
       current,
       onAdd: this.addElement.bind(this),
+      onRemove: this.removeElement.bind(this),
     });
   }
 
