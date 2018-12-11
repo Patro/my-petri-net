@@ -14,7 +14,7 @@ class Graph extends PureComponent {
     this.cy.add(cloneDeep(params));
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.initCytoscape();
     this.setLoaded();
   }
@@ -38,7 +38,7 @@ class Graph extends PureComponent {
     this.cy.elements(`#${params.data.id}`).remove();
   }
 
-  render = () => {
+  render() {
     return (
       <div className="graph">
         <StaticDiv className="cytoscape_container" divRef={this.cyContainerRef} />
