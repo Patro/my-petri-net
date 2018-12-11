@@ -136,7 +136,7 @@ describe('Graph', () => {
     });
   });
 
-  describe('update', () => {
+  describe('update options', () => {
     it('should update layout', () => {
       const initialLayout = {
         name: 'preset',
@@ -244,131 +244,139 @@ describe('Graph', () => {
 
       expect(getCytoscape(wrapper).style.mock.calls.length).toBe(1);
     });
+  });
 
-    it('should add new elements', () => {
-      const initialElements = {};
-      const updatedElements = {
-        'element-id': {
-          data: { id: 'element-id' },
-        },
-      };
+  describe('update elements', () => {
+    describe('with added element params', () => {
+      it('should add new elements', () => {
+        const initialElements = {};
+        const updatedElements = {
+          'element-id': {
+            data: { id: 'element-id' },
+          },
+        };
 
-      const wrapper = mount(<Graph elementsById={initialElements} />);
-      wrapper.setProps({ elementsById: updatedElements });
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        wrapper.setProps({ elementsById: updatedElements });
 
-      expect(getCytoscape(wrapper).add).toBeCalledWith({ data: { id: 'element-id' } });
+        expect(getCytoscape(wrapper).add).toBeCalledWith({ data: { id: 'element-id' } });
+      });
+
+      it('should clone given new element', () => {
+        const initialElements = {};
+        const updatedElements = {
+          'element-id': {
+            data: { id: 'element-id' },
+          },
+        };
+
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        wrapper.setProps({ elementsById: updatedElements });
+        updatedElements['element-id'].data.id = 'other-id';
+
+        const element = getCytoscape(wrapper).json()[0];
+        expect(element.data.id).toEqual('element-id');
+      });
     });
 
-    it('should clone given new element', () => {
-      const initialElements = {};
-      const updatedElements = {
-        'element-id': {
-          data: { id: 'element-id' },
-        },
-      };
+    describe('with removed element params', () => {
+      it('should remove former elements', () => {
+        const initialElements = {
+          'element-id': {
+            data: { id: 'element-id' },
+          },
+        };
+        const updatedElements = {};
 
-      const wrapper = mount(<Graph elementsById={initialElements} />);
-      wrapper.setProps({ elementsById: updatedElements });
-      updatedElements['element-id'].data.id = 'other-id';
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        const el = getCytoscape(wrapper).elements('#element-id').first();
+        wrapper.setProps({ elementsById: updatedElements });
 
-      const element = getCytoscape(wrapper).json()[0];
-      expect(element.data.id).toEqual('element-id');
+        expect(el.remove).toBeCalled();
+      });
     });
 
-    it('should remove former elements', () => {
-      const initialElements = {
-        'element-id': {
-          data: { id: 'element-id' },
-        },
-      };
-      const updatedElements = {};
+    describe('with updated element params', () => {
+      it('should update existing elements', () => {
+        const initialElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'A' },
+          },
+        };
+        const updatedElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'B' },
+          },
+        };
 
-      const wrapper = mount(<Graph elementsById={initialElements} />);
-      const el = getCytoscape(wrapper).elements('#element-id').first();
-      wrapper.setProps({ elementsById: updatedElements });
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        wrapper.setProps({ elementsById: updatedElements });
 
-      expect(el.remove).toBeCalled();
-    });
+        const el = getCytoscape(wrapper).elements('#element-id').first();
+        expect(el.json).toBeCalledWith({ data: { id: 'element-id', label: 'B' } });
+      });
 
-    it('should update existing elements', () => {
-      const initialElements = {
-        'element-id': {
+      it('should not update element if object is the same as the one given on init', () => {
+        const element = {
           data: { id: 'element-id', label: 'A' },
-        },
-      };
-      const updatedElements = {
-        'element-id': {
+        };
+        const initialElements = {
+          'element-id': element,
+        };
+        const updatedElements = {
+          'element-id': element,
+        };
+
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        wrapper.setProps({ elementsById: updatedElements, other: 'change' });
+
+        const el = getCytoscape(wrapper).elements('#element-id').first();
+        expect(el.json).not.toBeCalled();
+      });
+
+      it('should not update element if object is the same as the one given on previous update', () => {
+        const initialElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'A' },
+          },
+        };
+        const element = {
           data: { id: 'element-id', label: 'B' },
-        },
-      };
+        };
+        const updatedElements1 = {
+          'element-id': element
+        };
+        const updatedElements2 = {
+          'element-id': element
+        };
 
-      const wrapper = mount(<Graph elementsById={initialElements} />);
-      wrapper.setProps({ elementsById: updatedElements });
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        wrapper.setProps({ elementsById: updatedElements1 });
+        wrapper.setProps({ elementsById: updatedElements2, other: 'change' });
 
-      const el = getCytoscape(wrapper).elements('#element-id').first();
-      expect(el.json).toBeCalledWith({ data: { id: 'element-id', label: 'B' } });
-    });
+        const el = getCytoscape(wrapper).elements('#element-id').first();
+        expect(el.json.mock.calls.length).toBe(1);
+      });
 
-    it('should not update element if object is the same as the one given on init', () => {
-      const element = {
-        data: { id: 'element-id', label: 'A' },
-      };
-      const initialElements = {
-        'element-id': element,
-      };
-      const updatedElements = {
-        'element-id': element,
-      };
+      it('should clone element params', () => {
+        const initialElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'A' },
+          },
+        };
+        const updatedElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'B' },
+          },
+        };
 
-      const wrapper = mount(<Graph elementsById={initialElements} />);
-      wrapper.setProps({ elementsById: updatedElements, other: 'change' });
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        wrapper.setProps({ elementsById: updatedElements });
+        updatedElements['element-id'].data.label = 'C';
 
-      const el = getCytoscape(wrapper).elements('#element-id').first();
-      expect(el.json).not.toBeCalled();
-    });
-
-    it('should not update element if object is the same as the one given on previous update', () => {
-      const initialElements = {
-        'element-id': {
-          data: { id: 'element-id', label: 'A' },
-        },
-      };
-      const element = {
-        data: { id: 'element-id', label: 'B' },
-      };
-      const updatedElements1 = {
-        'element-id': element
-      };
-      const updatedElements2 = {
-        'element-id': element
-      };
-
-      const wrapper = mount(<Graph elementsById={initialElements} />);
-      wrapper.setProps({ elementsById: updatedElements1 });
-      wrapper.setProps({ elementsById: updatedElements2, other: 'change' });
-
-      const el = getCytoscape(wrapper).elements('#element-id').first();
-      expect(el.json.mock.calls.length).toBe(1);
-    });
-
-    it('should clone element params', () => {
-      const initialElements = {
-        'element-id': {
-          data: { id: 'element-id', label: 'A' },
-        },
-      };
-      const updatedElements = {
-        'element-id': {
-          data: { id: 'element-id', label: 'B' },
-        },
-      };
-
-      const wrapper = mount(<Graph elementsById={initialElements} />);
-      wrapper.setProps({ elementsById: updatedElements });
-      updatedElements['element-id'].data.label = 'C';
-
-      const el = getCytoscape(wrapper).elements('#element-id').first();
-      expect(el.data().label).toEqual('B');
+        const el = getCytoscape(wrapper).elements('#element-id').first();
+        expect(el.data().label).toEqual('B');
+      });
     });
   });
 });
