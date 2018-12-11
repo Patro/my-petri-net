@@ -12,6 +12,7 @@ describe('Graph', () => {
   beforeEach(() => {
     cytoscape.mockImplementation((options) => ({
       options,
+      add: jest.fn((json) => ( options.elements.push(json) )),
       container: jest.fn(() => ( options.container )),
       json: jest.fn(() => ( options.elements )),
       layout: jest.fn((layout = undefined) => ( layout ? options.layout = layout : options.layout )),
@@ -213,6 +214,36 @@ describe('Graph', () => {
       wrapper.setProps({ style: updatedStyle, other: 'change' });
 
       expect(getCytoscape(wrapper).style.mock.calls.length).toBe(1);
+    });
+
+    it('should add new elements', () => {
+      const initialElements = {};
+      const updatedElements = {
+        'element-id': {
+          data: { id: 'element-id' },
+        },
+      };
+
+      const wrapper = mount(<Graph elementsById={initialElements} />);
+      wrapper.setProps({ elementsById: updatedElements });
+
+      expect(getCytoscape(wrapper).add).toBeCalledWith({ data: { id: 'element-id' } });
+    });
+
+    it('should clone given new element', () => {
+      const initialElements = {};
+      const updatedElements = {
+        'element-id': {
+          data: { id: 'element-id' },
+        },
+      };
+
+      const wrapper = mount(<Graph elementsById={initialElements} />);
+      wrapper.setProps({ elementsById: updatedElements });
+      updatedElements['element-id'].data.id = 'other-id';
+
+      const element = getCytoscape(wrapper).json()[0];
+      expect(element.data.id).toEqual('element-id');
     });
   });
 });

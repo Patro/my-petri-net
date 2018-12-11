@@ -1,12 +1,17 @@
 import React, { PureComponent } from 'react';
 import cytoscape from 'cytoscape';
 import cloneDeep from 'lodash/cloneDeep';
+import changeDetector from '../utils/changeDetector';
 import StaticDiv from './StaticDiv';
 
 class Graph extends PureComponent {
   constructor(props) {
     super(props);
     this.cyContainerRef = React.createRef();
+  }
+
+  addElement(params) {
+    this.cy.add(cloneDeep(params));
   }
 
   componentDidMount = () => {
@@ -46,7 +51,22 @@ class Graph extends PureComponent {
   }
 
   updateCytoscape() {
+    this.updateElements();
     this.updateOptions();
+  }
+
+  updateElements() {
+    const prev = this.loaded.elementsById;
+    const current = this.props.elementsById;
+    if (prev === current) {
+      return;
+    }
+
+    changeDetector.compareByKey({
+      prev,
+      current,
+      onAdd: this.addElement.bind(this),
+    });
   }
 
   updateOption(key) {
