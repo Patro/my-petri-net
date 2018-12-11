@@ -59,6 +59,16 @@ class Graph extends PureComponent {
     this.updateOptions();
   }
 
+  updateElement(params) {
+    const prevParams = this.loaded.elementsById[params.data.id];
+    if (prevParams === params) {
+      return;
+    }
+
+    const element = this.cy.elements(`#${params.data.id}`);
+    element.json(cloneDeep(params));
+  }
+
   updateElements() {
     const prev = this.loaded.elementsById;
     const current = this.props.elementsById;
@@ -71,6 +81,7 @@ class Graph extends PureComponent {
       current,
       onAdd: this.addElement.bind(this),
       onRemove: this.removeElement.bind(this),
+      onRemain: this.updateElement.bind(this),
     });
   }
 

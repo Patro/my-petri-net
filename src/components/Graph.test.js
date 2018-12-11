@@ -12,14 +12,17 @@ describe('Graph', () => {
   beforeEach(() => {
     const mockElement = (cy, params) => {
       const el = {
-        _data: params.data,
-        id: jest.fn(() => ( el._data.id )),
+        _json: params,
+        data: jest.fn(() => ( el._json.data )),
+        id: jest.fn(() => ( el._json.data.id )),
+        json: jest.fn((json) => ( json ? el._json = json : el._json )),
         remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
       };
       return el;
     };
     const mockCollection = (elements) => ({
       first: () => elements[0],
+      json: (json) => elements.forEach(element => element.json(json)),
       remove: () => elements.forEach(element => element.remove()),
     });
     cytoscape.mockImplementation((options) => {
@@ -285,6 +288,87 @@ describe('Graph', () => {
       wrapper.setProps({ elementsById: updatedElements });
 
       expect(el.remove).toBeCalled();
+    });
+
+    it('should update existing elements', () => {
+      const initialElements = {
+        'element-id': {
+          data: { id: 'element-id', label: 'A' },
+        },
+      };
+      const updatedElements = {
+        'element-id': {
+          data: { id: 'element-id', label: 'B' },
+        },
+      };
+
+      const wrapper = mount(<Graph elementsById={initialElements} />);
+      wrapper.setProps({ elementsById: updatedElements });
+
+      const el = getCytoscape(wrapper).elements('#element-id').first();
+      expect(el.json).toBeCalledWith({ data: { id: 'element-id', label: 'B' } });
+    });
+
+    it('should not update element if object is the same as the one given on init', () => {
+      const element = {
+        data: { id: 'element-id', label: 'A' },
+      };
+      const initialElements = {
+        'element-id': element,
+      };
+      const updatedElements = {
+        'element-id': element,
+      };
+
+      const wrapper = mount(<Graph elementsById={initialElements} />);
+      wrapper.setProps({ elementsById: updatedElements, other: 'change' });
+
+      const el = getCytoscape(wrapper).elements('#element-id').first();
+      expect(el.json).not.toBeCalled();
+    });
+
+    it('should not update element if object is the same as the one given on previous update', () => {
+      const initialElements = {
+        'element-id': {
+          data: { id: 'element-id', label: 'A' },
+        },
+      };
+      const element = {
+        data: { id: 'element-id', label: 'B' },
+      };
+      const updatedElements1 = {
+        'element-id': element
+      };
+      const updatedElements2 = {
+        'element-id': element
+      };
+
+      const wrapper = mount(<Graph elementsById={initialElements} />);
+      wrapper.setProps({ elementsById: updatedElements1 });
+      wrapper.setProps({ elementsById: updatedElements2, other: 'change' });
+
+      const el = getCytoscape(wrapper).elements('#element-id').first();
+      expect(el.json.mock.calls.length).toBe(1);
+    });
+
+    it('should clone element params', () => {
+      const initialElements = {
+        'element-id': {
+          data: { id: 'element-id', label: 'A' },
+        },
+      };
+      const updatedElements = {
+        'element-id': {
+          data: { id: 'element-id', label: 'B' },
+        },
+      };
+
+      const wrapper = mount(<Graph elementsById={initialElements} />);
+      wrapper.setProps({ elementsById: updatedElements });
+      updatedElements['element-id'].data.label = 'C';
+
+      const el = getCytoscape(wrapper).elements('#element-id').first();
+      expect(el.data().label).toEqual('B');
     });
   });
 });
