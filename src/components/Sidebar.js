@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import CreateBoxContainer from '../containers/CreateBoxContainer';
 import PetriNetMenuContainer from '../containers/PetriNetMenuContainer';
 import Logo from './Logo';
 
@@ -10,6 +11,7 @@ class Sidebar extends Component {
     return (
       <Sider>
         <Logo />
+        <CreateBoxContainer />
         <PetriNetMenuContainer />
       </Sider>
     );
