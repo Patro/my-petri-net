@@ -24,6 +24,16 @@ class Graph extends PureComponent {
     this.setLoaded();
   }
 
+  findElement(params) {
+    const elements = this.cy.elements(`#${params.data.id}`);
+    if (elements.length === 1) {
+      return elements.first();
+    }
+    else if (elements.length > 0) {
+      throw new Error('ambiguous id');
+    }
+  }
+
   initCytoscape() {
     const elements = Object.values(this.props.elementsById || {});
     this.cy = cytoscape({
@@ -35,7 +45,12 @@ class Graph extends PureComponent {
   }
 
   removeElement(params) {
-    this.cy.elements(`#${params.data.id}`).remove();
+    const element = this.findElement(params);
+    if (element === undefined) {
+      return;
+    }
+
+    element.remove();
   }
 
   render() {
@@ -65,7 +80,11 @@ class Graph extends PureComponent {
       return;
     }
 
-    const element = this.cy.elements(`#${params.data.id}`);
+    const element = this.findElement(params);
+    if (element === undefined) {
+      return;
+    }
+
     element.json(cloneDeep(params));
   }
 
@@ -79,9 +98,11 @@ class Graph extends PureComponent {
     changeDetector.compareByKey({
       prev,
       current,
-      onAdd: this.addElement.bind(this),
-      onRemove: this.removeElement.bind(this),
-      onRemain: this.updateElement.bind(this),
+      onAdd: (params) => (
+        this.findElement(params) ? this.updateElement(params) : this.addElement(params)
+      ),
+      onRemove: (params) => this.removeElement(params),
+      onRemain: (params) => this.updateElement(params),
     });
   }
 

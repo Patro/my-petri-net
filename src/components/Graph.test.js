@@ -12,15 +12,16 @@ describe('Graph', () => {
   beforeEach(() => {
     const mockElement = (cy, params) => {
       const el = {
-        _json: params,
-        data: jest.fn(() => ( el._json.data )),
-        id: jest.fn(() => ( el._json.data.id )),
-        json: jest.fn((json) => ( json ? el._json = json : el._json )),
+        _json: () => ( cy._json[cy._jsonIndex(el.id())] ),
+        data: jest.fn(() => ( el._json().data )),
+        id: jest.fn(() => ( params.data.id )),
+        json: jest.fn((json) => ( json ? cy._json[cy._jsonIndex(el.id())] = json : el._json )),
         remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
       };
       return el;
     };
     const mockCollection = (elements) => ({
+      length: elements.length,
       first: () => elements[0],
       json: (json) => elements.forEach(element => element.json(json)),
       remove: () => elements.forEach(element => element.remove()),
@@ -29,6 +30,7 @@ describe('Graph', () => {
       const cy = {
         _container: options.container,
         _json: options.elements,
+        _jsonIndex: (id) => cy._json.findIndex(json => json.data.id === id),
         _layout: options.layout,
         _style: options.style,
         add: jest.fn((json) => {
@@ -277,6 +279,23 @@ describe('Graph', () => {
         const element = getCytoscape(wrapper).json()[0];
         expect(element.data.id).toEqual('element-id');
       });
+
+      it('should update params if element was created by a third party', () => {
+        const initialElements = {};
+        const thirdPartyElement = { data: { id: 'element-id', label: 'A' } };
+        const updatedElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'B' },
+          },
+        };
+
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        getCytoscape(wrapper).add(thirdPartyElement);
+        wrapper.setProps({ elementsById: updatedElements });
+
+        const element = getCytoscape(wrapper).json()[0];
+        expect(element.data.label).toEqual('B');
+      });
     });
 
     describe('with removed element params', () => {
@@ -293,6 +312,19 @@ describe('Graph', () => {
         wrapper.setProps({ elementsById: updatedElements });
 
         expect(el.remove).toBeCalled();
+      });
+
+      it('should not fail if element was removed by a third party', () => {
+        const initialElements = {};
+        const updatedElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'B' },
+          },
+        };
+
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        getCytoscape(wrapper).elements('element-id').remove();
+        wrapper.setProps({ elementsById: updatedElements });
       });
     });
 
@@ -376,6 +408,23 @@ describe('Graph', () => {
 
         const el = getCytoscape(wrapper).elements('#element-id').first();
         expect(el.data().label).toEqual('B');
+      });
+
+      it('should not fail if element was removed by a third party', () => {
+        const initialElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'A' },
+          },
+        };
+        const updatedElements = {
+          'element-id': {
+            data: { id: 'element-id', label: 'B' },
+          },
+        };
+
+        const wrapper = mount(<Graph elementsById={initialElements} />);
+        getCytoscape(wrapper).elements('#element-id').remove();
+        wrapper.setProps({ elementsById: updatedElements });
       });
     });
   });
