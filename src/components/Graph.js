@@ -56,12 +56,23 @@ class Graph extends PureComponent {
     this.callCallback(this.props.onClickOnElement, this.elementType(event.target), event.target.id());
   }
 
+  handleFree = (event) => {
+    if (this.hasNodeMoved(event.target)) {
+      this.callCallback(this.props.onMove, event.target.id(), { ...event.target.position() });
+    }
+  }
+
   handleSelect = (event) => {
     this.callCallback(this.props.onSelect, this.elementType(event.target), event.target.id());
   }
 
   handleUnselect = (event) => {
     this.callCallback(this.props.onUnselect, this.elementType(event.target), event.target.id());
+  }
+
+  hasNodeMoved(node) {
+    const loadedPosition = this.loaded.elementsById[node.id()].position;
+    return loadedPosition.x !== node.position().x || loadedPosition.y !== node.position().y;
   }
 
   initCytoscape() {
@@ -72,6 +83,7 @@ class Graph extends PureComponent {
       layout: cloneDeep(this.props.layout || {}),
       style: cloneDeep(this.props.style || {}),
     });
+    this.cy.on('free', this.handleFree);
     this.cy.on('select', this.handleSelect);
     this.cy.on('unselect', this.handleUnselect);
     this.cy.on('vclick', this.handleClick);

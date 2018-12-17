@@ -19,8 +19,8 @@ describe('Graph', () => {
         group: jest.fn(() => ( params.group )),
         emit: jest.fn((event) => ( cy.emit(el._addEventFields(event)) )),
         id: jest.fn(() => ( params.data.id )),
-        json: jest.fn((json) => ( json ? cy._json[cy._jsonIndex(el.id())] = json : el._json )),
-        position: jest.fn(() => ( el._json.position )),
+        json: jest.fn((json) => ( json ? cy._json[cy._jsonIndex(el.id())] = json : el._json() )),
+        position: jest.fn((position) => ( position ? el._json().position = position : el._json().position )),
         remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
       };
       return el;
@@ -449,7 +449,7 @@ describe('Graph', () => {
     });
   });
 
-  describe('callbacks', () => {
+  describe('handle events', () => {
     describe('on click', () => {
       it('should call on click on background callback if event is emitted on cytoscape core', () => {
         const onClickOnBackground = jest.fn();
@@ -491,6 +491,45 @@ describe('Graph', () => {
         getCytoscape(wrapper).elements('#edge-id').emit(event);
 
         expect(onClickOnElement).toBeCalledWith(elementTypes.EDGE, 'edge-id');
+      });
+    });
+
+    describe('on move', () => {
+      it('should call on move callback if node position was changed on free event', () => {
+        const elementsById = {
+          'node-id': {
+            group: 'nodes',
+            data: { id: 'node-id' },
+            position: { x: 100, y: 100 },
+          },
+        };
+        const onMove = jest.fn();
+        const event = { type: 'free' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onMove={onMove} />);
+        const node = getCytoscape(wrapper).elements('#node-id').first();
+        node.position({ x: 101, y: 100 });
+        node.emit(event);
+
+        expect(onMove).toBeCalledWith('node-id', { x: 101, y: 100 });
+      });
+
+      it('should not call on move callback if node position was not changed on free event', () => {
+        const elementsById = {
+          'node-id': {
+            group: 'nodes',
+            data: { id: 'node-id' },
+            position: { x: 100, y: 100 },
+          },
+        };
+        const onMove = jest.fn();
+        const event = { type: 'free' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onMove={onMove} />);
+        const node = getCytoscape(wrapper).elements('#node-id').first();
+        node.emit(event);
+
+        expect(onMove).not.toBeCalled();
       });
     });
 
