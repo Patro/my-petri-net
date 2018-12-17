@@ -555,4 +555,12 @@ describe('Graph', () => {
       });
     });
   });
+
+  describe('children', () => {
+    it('should render children', () => {
+      const wrapper = mount(<Graph><div className='test_div' /></Graph>);
+
+      expect(wrapper.find('.test_div').length).toBe(1);
+    });
+  });
 });

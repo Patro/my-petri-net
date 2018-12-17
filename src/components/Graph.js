@@ -107,6 +107,7 @@ class Graph extends PureComponent {
     return (
       <div className="graph">
         <StaticDiv className="cytoscape_container" divRef={this.cyContainerRef} />
+        { this.props.children }
       </div>
     );
   }
