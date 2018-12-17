@@ -127,4 +127,89 @@ describe('EdgeHandles', () => {
 
     expect(onAddEdge).toBeCalledWith('node-a', 'node-b');
   });
+
+  describe('should add edge callback', () => {
+    const setupEdgehandlesInit = (edgeHandleNode) => (
+      jest.fn(options => ({ handleNode: edgeHandleNode }))
+    );
+
+    it('should call callback on edge type call', () => {
+      const shouldAddEdge = jest.fn();
+      const edgehandlesInit = setupEdgehandlesInit();
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+      mount(
+        <CytoscapeContext.Provider value={cytoscapeContext}>
+          <EdgeHandles shouldAddEdge={shouldAddEdge} />
+        </CytoscapeContext.Provider>
+      );
+      const options = edgehandlesInit.mock.calls[0][0];
+      options.edgeType({ id: () => 'node-a' }, { id: () => 'node-b', same: () => {} });
+
+      expect(shouldAddEdge).toBeCalledWith('node-a', 'node-b');
+    });
+
+    it('should return flat as edge type if callback returns true', () => {
+      const shouldAddEdge = jest.fn(() => true);
+      const edgehandlesInit = setupEdgehandlesInit();
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+      mount(
+        <CytoscapeContext.Provider value={cytoscapeContext}>
+          <EdgeHandles shouldAddEdge={shouldAddEdge} />
+        </CytoscapeContext.Provider>
+      );
+      const options = edgehandlesInit.mock.calls[0][0];
+      const edgeType = options.edgeType({ id: () => 'node-a' }, { id: () => 'node-b', same: () => false });
+
+      expect(edgeType).toBe('flat');
+    });
+
+    it('should return undefined if callback returns false', () => {
+      const shouldAddEdge = jest.fn(() => false);
+      const edgehandlesInit = setupEdgehandlesInit();
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+      mount(
+        <CytoscapeContext.Provider value={cytoscapeContext}>
+          <EdgeHandles shouldAddEdge={shouldAddEdge} />
+        </CytoscapeContext.Provider>
+      );
+      const options = edgehandlesInit.mock.calls[0][0];
+      const edgeType = options.edgeType({ id: () => 'node-a' }, { id: () => 'node-b', same: () => false });
+
+      expect(edgeType).toBeUndefined();
+    });
+
+    it('should return undefined if target node is a collection with 0 items', () => {
+      const edgehandlesInit = setupEdgehandlesInit();
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+      mount(
+        <CytoscapeContext.Provider value={cytoscapeContext}>
+          <EdgeHandles />
+        </CytoscapeContext.Provider>
+      );
+      const options = edgehandlesInit.mock.calls[0][0];
+      const edgeType = options.edgeType({ id: () => 'node-a' }, { length: 0 });
+
+      expect(edgeType).toBeUndefined();
+    });
+
+    it('should return undefined if target node is edge handle node', () => {
+      const edgeHandleNode = { same: (node) => edgeHandleNode === node };
+      const edgehandlesInit = setupEdgehandlesInit(edgeHandleNode);
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+      mount(
+        <CytoscapeContext.Provider value={cytoscapeContext}>
+          <EdgeHandles />
+        </CytoscapeContext.Provider>
+      );
+      const options = edgehandlesInit.mock.calls[0][0];
+      const edgeType = options.edgeType({ id: () => 'node-a' }, edgeHandleNode);
+
+      expect(edgeType).toBeUndefined();
+    });
+  });
 });

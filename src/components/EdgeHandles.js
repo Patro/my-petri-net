@@ -11,6 +11,7 @@ class EdgeHandles extends PureComponent {
   constructor(props) {
     super(props);
     this.edgeParams = this.edgeParams.bind(this);
+    this.edgeType = this.edgeType.bind(this);
     this.handleComplete = this.handleComplete.bind(this);
   }
 
@@ -24,6 +25,13 @@ class EdgeHandles extends PureComponent {
 
   edgeParams(sourceNode, targetNode) {
     return this.props.edgeParams(sourceNode.id(), targetNode.id());
+  }
+
+  edgeType(sourceNode, targetNode) {
+    if (this.shouldAddEdge(sourceNode, targetNode)) {
+      return 'flat';
+    }
+    return;
   }
 
   handleComplete(sourceNode, targetNode) {
@@ -41,12 +49,24 @@ class EdgeHandles extends PureComponent {
     this.edgehandles = this.context.edgehandles({
       complete: this.handleComplete,
       edgeParams: this.edgeParams,
+      edgeType: this.edgeType,
       snap: this.props.snap,
     });
   }
 
   render() {
     return null;
+  }
+
+  shouldAddEdge(sourceNode, targetNode) {
+    if (targetNode.length === 0) {
+      return false;
+    }
+    if (targetNode.same(this.edgehandles.handleNode)) {
+      return false;
+    }
+
+    return this.props.shouldAddEdge(sourceNode.id(), targetNode.id());
   }
 }
 
