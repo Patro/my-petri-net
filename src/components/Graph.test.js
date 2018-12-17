@@ -527,5 +527,39 @@ describe('Graph', () => {
         expect(onSelect).toBeCalledWith(elementTypes.EDGE, 'edge-id');
       });
     });
+
+    describe('on unselect', () => {
+      it('should call on unselect callback if event is emitted on node', () => {
+        const elementsById = {
+          'node-id': {
+            group: 'nodes',
+            data: { id: 'node-id' },
+          },
+        };
+        const onUnselect = jest.fn();
+        const event = { type: 'unselect' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onUnselect={onUnselect} />);
+        getCytoscape(wrapper).elements('#node-id').emit(event);
+
+        expect(onUnselect).toBeCalledWith(elementTypes.NODE, 'node-id');
+      });
+
+      it('should call on select callback if event is emitted on edge', () => {
+        const elementsById = {
+          'edge-id': {
+            group: 'edges',
+            data: { id: 'edge-id' },
+          },
+        };
+        const onUnselect = jest.fn();
+        const event = { type: 'unselect' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onUnselect={onUnselect} />);
+        getCytoscape(wrapper).elements('#edge-id').emit(event);
+
+        expect(onUnselect).toBeCalledWith(elementTypes.EDGE, 'edge-id');
+      });
+    });
   });
 });

@@ -60,6 +60,10 @@ class Graph extends PureComponent {
     this.callCallback(this.props.onSelect, this.elementType(event.target), event.target.id());
   }
 
+  handleUnselect = (event) => {
+    this.callCallback(this.props.onUnselect, this.elementType(event.target), event.target.id());
+  }
+
   initCytoscape() {
     const elements = Object.values(this.props.elementsById || {});
     this.cy = cytoscape({
@@ -69,6 +73,7 @@ class Graph extends PureComponent {
       style: cloneDeep(this.props.style || {}),
     });
     this.cy.on('select', this.handleSelect);
+    this.cy.on('unselect', this.handleUnselect);
     this.cy.on('vclick', this.handleClick);
   }
 
