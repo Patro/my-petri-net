@@ -36,6 +36,7 @@ const mockCore = (options) => {
       cy._elements.push(mockElement(cy, json));
     }),
     container: jest.fn(() => ( cy._container )),
+    edgehandles: jest.fn(),
     elements: jest.fn((selector) => { // expects selector with id, e.g. #petri-net-1
       const id = selector.substring(1);
       return mockCollection(cy._elements.filter(el => el.id() === id));
@@ -60,4 +61,6 @@ const mockCore = (options) => {
   return cy;
 };
 
-export default jest.fn().mockImplementation(mockCore);
+const cytoscape = jest.fn().mockImplementation(mockCore);
+cytoscape.use = jest.fn(ext => ext(cytoscape));
+export default cytoscape;
