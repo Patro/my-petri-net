@@ -493,5 +493,39 @@ describe('Graph', () => {
         expect(onClickOnElement).toBeCalledWith(elementTypes.EDGE, 'edge-id');
       });
     });
+
+    describe('on select', () => {
+      it('should call on select callback if event is emitted on node', () => {
+        const elementsById = {
+          'node-id': {
+            group: 'nodes',
+            data: { id: 'node-id' },
+          },
+        };
+        const onSelect = jest.fn();
+        const event = { type: 'select' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onSelect={onSelect} />);
+        getCytoscape(wrapper).elements('#node-id').emit(event);
+
+        expect(onSelect).toBeCalledWith(elementTypes.NODE, 'node-id');
+      });
+
+      it('should call on select callback if event is emitted on edge', () => {
+        const elementsById = {
+          'edge-id': {
+            group: 'edges',
+            data: { id: 'edge-id' },
+          },
+        };
+        const onSelect = jest.fn();
+        const event = { type: 'select' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onSelect={onSelect} />);
+        getCytoscape(wrapper).elements('#edge-id').emit(event);
+
+        expect(onSelect).toBeCalledWith(elementTypes.EDGE, 'edge-id');
+      });
+    });
   });
 });
