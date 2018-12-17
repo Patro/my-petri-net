@@ -111,4 +111,20 @@ describe('EdgeHandles', () => {
 
     expect(edgeParams).toBeCalledWith('node-a', 'node-b');
   });
+
+  it('should call on add edge callback on complete', () => {
+    const onAddEdge = jest.fn();
+    const edgehandlesInit = jest.fn();
+    const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+    mount(
+      <CytoscapeContext.Provider value={cytoscapeContext}>
+        <EdgeHandles onAddEdge={onAddEdge} />
+      </CytoscapeContext.Provider>
+    );
+    const options = edgehandlesInit.mock.calls[0][0];
+    options.complete({ id: () => 'node-a' }, { id: () => 'node-b' });
+
+    expect(onAddEdge).toBeCalledWith('node-a', 'node-b');
+  });
 });
