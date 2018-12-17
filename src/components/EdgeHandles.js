@@ -8,6 +8,15 @@ cytoscape.use(edgehandles);
 class EdgeHandles extends PureComponent {
   static contextType = CytoscapeContext;
 
+  constructor(props) {
+    super(props);
+    this.edgeParams = this.edgeParams.bind(this);
+  }
+
+  edgeParams(sourceNode, targetNode) {
+    return this.props.edgeParams(sourceNode.id(), targetNode.id());
+  }
+
   initEdgeHandles() {
     if (this.context === undefined) {
       return;
@@ -17,6 +26,7 @@ class EdgeHandles extends PureComponent {
     }
 
     this.edgehandles = this.context.edgehandles({
+      edgeParams: this.edgeParams,
       snap: this.props.snap,
     });
   }

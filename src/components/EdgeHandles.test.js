@@ -95,4 +95,20 @@ describe('EdgeHandles', () => {
       expect(edgehandlesInit.mock.calls[0][0]).toMatchObject({ snap: true });
     });
   });
+
+  it('should forward edge params callback call', () => {
+    const edgeParams = jest.fn();
+    const edgehandlesInit = jest.fn();
+    const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+    mount(
+      <CytoscapeContext.Provider value={cytoscapeContext}>
+        <EdgeHandles edgeParams={edgeParams} />
+      </CytoscapeContext.Provider>
+    );
+    const options = edgehandlesInit.mock.calls[0][0];
+    options.edgeParams({ id: () => 'node-a' }, { id: () => 'node-b' });
+
+    expect(edgeParams).toBeCalledWith('node-a', 'node-b');
+  });
 });
