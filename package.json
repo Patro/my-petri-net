@@ -6,6 +6,7 @@
     "antd": "3.10.9",
     "cytoscape": "3.3.0",
     "cytoscape-edgehandles": "3.5.0",
+    "memoizee": "0.4.14",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-redux": "5.1.1",
