@@ -2833,6 +2833,14 @@ cyclist@~0.2.2:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
   integrity sha1-GzN5LhHpFKL9bW7WRHRkRE5fpkA=
 
+cytoscape-edgehandles@3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/cytoscape-edgehandles/-/cytoscape-edgehandles-3.5.0.tgz#5d800e335d3cd5720a421f49ce3c31e7f69ad347"
+  integrity sha512-PKuuCLKvgVPPiR0PLY51FbtHFS2w9mRGRjd5kwWJqARQrKqVm8yJqElbyjFHCs9DhuDMDlOgdZcCWm+mBvaCBA==
+  dependencies:
+    lodash.memoize "^4.1.2"
+    lodash.throttle "^4.1.1"
+
 cytoscape@3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.3.0.tgz#21ac2788978e38da487c4a1f38fed3c87a76035f"
@@ -6199,7 +6207,7 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "~3.0.0"
 
-lodash.throttle@^4.0.0:
+lodash.throttle@^4.0.0, lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
