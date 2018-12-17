@@ -62,6 +62,10 @@ class Graph extends PureComponent {
     }
   }
 
+  handleGrab = (event) => {
+    event.target.select();
+  }
+
   handleSelect = (event) => {
     this.callCallback(this.props.onSelect, this.elementType(event.target), event.target.id());
   }
@@ -84,6 +88,7 @@ class Graph extends PureComponent {
       style: cloneDeep(this.props.style || {}),
     });
     this.cy.on('free', this.handleFree);
+    this.cy.on('grab', this.handleGrab);
     this.cy.on('select', this.handleSelect);
     this.cy.on('unselect', this.handleUnselect);
     this.cy.on('vclick', this.handleClick);

@@ -22,6 +22,7 @@ describe('Graph', () => {
         json: jest.fn((json) => ( json ? cy._json[cy._jsonIndex(el.id())] = json : el._json() )),
         position: jest.fn((position) => ( position ? el._json().position = position : el._json().position )),
         remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
+        select: jest.fn(() => ( el.emit({ type: 'select' }) )),
       };
       return el;
     };
@@ -564,6 +565,22 @@ describe('Graph', () => {
         getCytoscape(wrapper).elements('#edge-id').emit(event);
 
         expect(onSelect).toBeCalledWith(elementTypes.EDGE, 'edge-id');
+      });
+
+      it('should call on select callback if node was grabbed', () => {
+        const elementsById = {
+          'node-id': {
+            group: 'nodes',
+            data: { id: 'node-id' },
+          },
+        };
+        const onSelect = jest.fn();
+        const event = { type: 'grab' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onSelect={onSelect} />);
+        getCytoscape(wrapper).elements('#node-id').emit(event);
+
+        expect(onSelect).toBeCalledWith(elementTypes.NODE, 'node-id');
       });
     });
 
