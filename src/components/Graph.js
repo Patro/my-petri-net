@@ -2,16 +2,25 @@ import React, { PureComponent } from 'react';
 import cytoscape from 'cytoscape';
 import cloneDeep from 'lodash/cloneDeep';
 import changeDetector from '../utils/changeDetector';
+import * as elementType from '../constants/elementTypes';
 import StaticDiv from './StaticDiv';
 
 class Graph extends PureComponent {
   constructor(props) {
     super(props);
     this.cyContainerRef = React.createRef();
+    this.handleClick = this.handleClick.bind(this);
   }
 
   addElement(params) {
     this.cy.add(cloneDeep(params));
+  }
+
+  callCallback(callback, ...args) {
+    if (callback === undefined) {
+      return;
+    }
+    callback(...args);
   }
 
   componentDidMount() {
@@ -24,6 +33,10 @@ class Graph extends PureComponent {
     this.setLoaded();
   }
 
+  elementType(element) {
+    return element.group() === 'nodes' ? elementType.NODE : elementType.EDGE;
+  }
+
   findElement(params) {
     const elements = this.cy.elements(`#${params.data.id}`);
     if (elements.length === 1) {
@@ -34,6 +47,15 @@ class Graph extends PureComponent {
     }
   }
 
+  handleClick = (event) => {
+    if (event.target === this.cy) {
+      this.callCallback(this.props.onClickOnBackground, { ...event.position });
+      return;
+    }
+
+    this.callCallback(this.props.onClickOnElement, this.elementType(event.target), event.target.id());
+  }
+
   initCytoscape() {
     const elements = Object.values(this.props.elementsById || {});
     this.cy = cytoscape({
@@ -42,6 +64,7 @@ class Graph extends PureComponent {
       layout: cloneDeep(this.props.layout || {}),
       style: cloneDeep(this.props.style || {}),
     });
+    this.cy.on('vclick', this.handleClick);
   }
 
   removeElement(params) {

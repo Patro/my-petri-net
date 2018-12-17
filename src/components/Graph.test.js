@@ -1,6 +1,7 @@
 import React from 'react';
 import cytoscape from 'cytoscape';
 import { mount } from 'enzyme';
+import * as elementTypes from '../constants/elementTypes';
 import Graph from './Graph';
 import StaticDiv from './StaticDiv';
 
@@ -12,23 +13,30 @@ describe('Graph', () => {
   beforeEach(() => {
     const mockElement = (cy, params) => {
       const el = {
+        _addEventFields: (event) => ({ target: el, ...event }),
         _json: () => ( cy._json[cy._jsonIndex(el.id())] ),
         data: jest.fn(() => ( el._json().data )),
+        group: jest.fn(() => ( params.group )),
+        emit: jest.fn((event) => ( cy.emit(el._addEventFields(event)) )),
         id: jest.fn(() => ( params.data.id )),
         json: jest.fn((json) => ( json ? cy._json[cy._jsonIndex(el.id())] = json : el._json )),
+        position: jest.fn(() => ( el._json.position )),
         remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
       };
       return el;
     };
     const mockCollection = (elements) => ({
       length: elements.length,
+      emit: (event) => elements.forEach(element => element.emit(event)),
       first: () => elements[0],
       json: (json) => elements.forEach(element => element.json(json)),
       remove: () => elements.forEach(element => element.remove()),
     });
     cytoscape.mockImplementation((options) => {
       const cy = {
+        _addEventFields: (event) => ({ cy, target: cy, ...event }),
         _container: options.container,
+        _eventHandlers: {},
         _json: options.elements,
         _jsonIndex: (id) => cy._json.findIndex(json => json.data.id === id),
         _layout: options.layout,
@@ -42,8 +50,20 @@ describe('Graph', () => {
           const id = selector.substring(1);
           return mockCollection(cy._elements.filter(el => el.id() === id));
         }),
+        emit: jest.fn((event) => {
+          if (cy._eventHandlers[event.type] === undefined) {
+            return;
+          }
+          cy._eventHandlers[event.type].forEach(handler => handler(cy._addEventFields(event)));
+        }),
         json: jest.fn(() => ( cy._json )),
         layout: jest.fn((layout = undefined) => ( layout ? cy._layout = layout : cy._layout )),
+        on: jest.fn((type, callback) => {
+          if (cy._eventHandlers[type] === undefined) {
+            cy._eventHandlers[type] = [];
+          }
+          cy._eventHandlers[type].push(callback);
+        }),
         style: jest.fn((style = undefined) => ( style ? cy._style = style : cy._style)),
       };
       cy._elements = options.elements.map(element => mockElement(cy, element));
@@ -425,6 +445,52 @@ describe('Graph', () => {
         const wrapper = mount(<Graph elementsById={initialElements} />);
         getCytoscape(wrapper).elements('#element-id').remove();
         wrapper.setProps({ elementsById: updatedElements });
+      });
+    });
+  });
+
+  describe('callbacks', () => {
+    describe('on click', () => {
+      it('should call on click on background callback if event is emitted on cytoscape core', () => {
+        const onClickOnBackground = jest.fn();
+        const event = { type: 'vclick', position: { x: 100, y: 100 } };
+
+        const wrapper = mount(<Graph onClickOnBackground={onClickOnBackground} />);
+        getCytoscape(wrapper).emit(event);
+
+        expect(onClickOnBackground).toBeCalledWith({ x: 100, y: 100 });
+      });
+
+      it('should call on click on element callback if event is emitted on node', () => {
+        const elementsById = {
+          'node-id': {
+            group: 'nodes',
+            data: { id: 'node-id' },
+          },
+        };
+        const onClickOnElement = jest.fn();
+        const event = { type: 'vclick' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onClickOnElement={onClickOnElement} />);
+        getCytoscape(wrapper).elements('#node-id').emit(event);
+
+        expect(onClickOnElement).toBeCalledWith(elementTypes.NODE, 'node-id');
+      });
+
+      it('should call on click on element callback if event is emitted on edge', () => {
+        const elementsById = {
+          'edge-id': {
+            group: 'edges',
+            data: { id: 'edge-id' },
+          },
+        };
+        const onClickOnElement = jest.fn();
+        const event = { type: 'vclick' };
+
+        const wrapper = mount(<Graph elementsById={elementsById} onClickOnElement={onClickOnElement} />);
+        getCytoscape(wrapper).elements('#edge-id').emit(event);
+
+        expect(onClickOnElement).toBeCalledWith(elementTypes.EDGE, 'edge-id');
       });
     });
   });
