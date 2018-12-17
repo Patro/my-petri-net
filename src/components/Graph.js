@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import cytoscape from 'cytoscape';
 import cloneDeep from 'lodash/cloneDeep';
+import CytoscapeContext from '../contexts/CytoscapeContext';
 import changeDetector from '../utils/changeDetector';
 import * as elementType from '../constants/elementTypes';
 import StaticDiv from './StaticDiv';
@@ -8,6 +9,7 @@ import StaticDiv from './StaticDiv';
 class Graph extends PureComponent {
   constructor(props) {
     super(props);
+    this.state = {};
     this.cyContainerRef = React.createRef();
     this.handleClick = this.handleClick.bind(this);
   }
@@ -92,6 +94,8 @@ class Graph extends PureComponent {
     this.cy.on('select', this.handleSelect);
     this.cy.on('unselect', this.handleUnselect);
     this.cy.on('vclick', this.handleClick);
+
+    this.setState({ cy: this.cy });
   }
 
   removeElement(params) {
@@ -107,7 +111,9 @@ class Graph extends PureComponent {
     return (
       <div className="graph">
         <StaticDiv className="cytoscape_container" divRef={this.cyContainerRef} />
-        { this.props.children }
+        <CytoscapeContext.Provider value={this.state.cy}>
+          {this.props.children}
+        </CytoscapeContext.Provider>
       </div>
     );
   }

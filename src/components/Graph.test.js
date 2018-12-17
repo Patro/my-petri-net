@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { mount } from 'enzyme';
 import * as elementTypes from '../constants/elementTypes';
+import CytoscapeContext from '../contexts/CytoscapeContext';
 import Graph from './Graph';
 import StaticDiv from './StaticDiv';
 
@@ -561,6 +562,19 @@ describe('Graph', () => {
       const wrapper = mount(<Graph><div className='test_div' /></Graph>);
 
       expect(wrapper.find('.test_div').length).toBe(1);
+    });
+
+    it('should provice a context with the cytoscape object as value', () => {
+      class InnerComponent extends Component {
+        static contextType = CytoscapeContext;
+        render = () => null;
+      }
+
+      const wrapper = mount(<Graph><InnerComponent /></Graph>);
+      const cytoscape = getCytoscape(wrapper);
+      const innerComponent = wrapper.find(InnerComponent);
+
+      expect(innerComponent.instance().context).toBe(cytoscape);
     });
   });
 });
