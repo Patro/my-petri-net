@@ -5,6 +5,7 @@ import CytoscapeContext from '../contexts/CytoscapeContext';
 import changeDetector from '../utils/changeDetector';
 import * as elementType from '../constants/elementTypes';
 import StaticDiv from './StaticDiv';
+import './Graph.css';
 
 class Graph extends PureComponent {
   constructor(props) {
