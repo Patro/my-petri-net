@@ -11,13 +11,27 @@ class Editor extends Component {
     super(props);
     this.state = {
       activeNodeType: nodeType.TRANSITION,
+      selected: {},
     };
     this.handleClickOnBackground = this.handleClickOnBackground.bind(this);
     this.handleNodeTypeChange = this.handleNodeTypeChange.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
+    this.handleUnselect = this.handleUnselect.bind(this);
   }
 
   handleClickOnBackground(position) {
     this.props.onAddNode(this.state.activeNodeType, position);
+  }
+
+  handleSelect(type, id) {
+    this.setState({ selected: { type, id } });
+  }
+
+  handleUnselect(id) {
+    if (id !== this.state.selected.id) {
+      return;
+    }
+    this.setState({ selected: {} });
   }
 
   handleNodeTypeChange(nodeType) {
@@ -32,9 +46,12 @@ class Editor extends Component {
           <Content className="content">
             <PetriNetGraph
               petriNet={this.props.petriNet}
+              selectedId={this.state.selected.id}
               onAddEdge={this.props.onAddEdge}
               onClickOnBackground={this.handleClickOnBackground}
-              onMove={this.props.onMove} />
+              onMove={this.props.onMove}
+              onSelect={this.handleSelect}
+              onUnselect={this.handleUnselect} />
           </Content>
         </Layout>
       </>
