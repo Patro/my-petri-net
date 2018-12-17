@@ -13,6 +13,14 @@ class EdgeHandles extends PureComponent {
     this.edgeParams = this.edgeParams.bind(this);
   }
 
+  componentDidMount = () => {
+    this.initEdgeHandles();
+  }
+
+  componentDidUpdate = () => {
+    this.initEdgeHandles();
+  }
+
   edgeParams(sourceNode, targetNode) {
     return this.props.edgeParams(sourceNode.id(), targetNode.id());
   }
@@ -29,14 +37,6 @@ class EdgeHandles extends PureComponent {
       edgeParams: this.edgeParams,
       snap: this.props.snap,
     });
-  }
-
-  componentDidMount = () => {
-    this.initEdgeHandles();
-  }
-
-  componentDidUpdate = () => {
-    this.initEdgeHandles();
   }
 
   render() {
