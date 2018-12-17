@@ -1,0 +1,14 @@
+.toolbar.ant-layout-header {
+  padding: 0 0 0 20px;
+  color: white;
+  height: 48px;
+  line-height: 48px;
+}
+
+.toolbar__item {
+  padding-right: 15px;
+}
+
+.toolbar__item .anticon {
+  margin-right: 4px;
+}
