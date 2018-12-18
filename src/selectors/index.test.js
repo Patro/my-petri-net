@@ -1,4 +1,7 @@
-import { getCurrentPetriNet, getPetriNet, getPetriNets } from './index';
+import {
+  getCurrentPetriNet, getCurrentPetriNetId,
+  getPetriNet, getPetriNets,
+} from './index';
 
 describe('get petri nets', () => {
   it('should return empty array with initial state', () => {
@@ -133,5 +136,19 @@ describe('get current petri net', () => {
     };
 
     expect(getCurrentPetriNet(state, props)).toEqual(petriNet);
+  });
+});
+
+describe('get current petri net id', () => {
+  it('should return petri net id from params', () => {
+    const props = {
+      match: {
+        params: {
+          id: 'petri-net-uuid',
+        },
+      },
+    }
+
+    expect(getCurrentPetriNetId(props)).toEqual('petri-net-uuid');
   });
 });

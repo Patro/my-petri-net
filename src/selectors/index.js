@@ -1,5 +1,9 @@
 export const getCurrentPetriNet = (state, props) => (
-  getPetriNet(state, props.match.params.id)
+  getPetriNet(state, getCurrentPetriNetId(props))
+);
+
+export const getCurrentPetriNetId = (props) => (
+  props.match.params.id
 );
 
 export const getPetriNet = (state, id) => (
