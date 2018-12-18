@@ -3,3 +3,8 @@
 .outer_layout {
   min-height: 100vh;
 }
+
+.content {
+  position: relative;
+  background-color: #fff;
+}
