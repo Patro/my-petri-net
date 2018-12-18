@@ -88,6 +88,7 @@ class Graph extends PureComponent {
       container: this.cyContainerRef.current,
       elements: cloneDeep(elements),
       layout: cloneDeep(this.props.layout || {}),
+      maxZoom: this.props.maxZoom,
       style: cloneDeep(this.props.style || {}),
     });
     this.cy.on('free', this.handleFree);
@@ -173,7 +174,7 @@ class Graph extends PureComponent {
   }
 
   updateOptions() {
-    const optionsToUpdate = ['layout', 'style'];
+    const optionsToUpdate = ['layout', 'maxZoom', 'style'];
     optionsToUpdate.map(key => this.updateOption(key));
   }
 }

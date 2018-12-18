@@ -30,6 +30,7 @@ const mockCore = (options) => {
     _json: options.elements,
     _jsonIndex: (id) => cy._json.findIndex(json => json.data.id === id),
     _layout: options.layout,
+    _maxZoom: options.maxZoom,
     _style: options.style,
     add: jest.fn((json) => {
       cy._json.push(json);
@@ -49,6 +50,7 @@ const mockCore = (options) => {
     }),
     json: jest.fn(() => ( cy._json )),
     layout: jest.fn((layout = undefined) => ( layout ? cy._layout = layout : cy._layout )),
+    maxZoom: jest.fn((maxZoom = undefined) => ( maxZoom ? cy._maxZoom = maxZoom : cy._maxZoom )),
     on: jest.fn((type, callback) => {
       if (cy._eventHandlers[type] === undefined) {
         cy._eventHandlers[type] = [];

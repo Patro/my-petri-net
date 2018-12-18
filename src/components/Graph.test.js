@@ -73,6 +73,12 @@ describe('Graph', () => {
       expect(layout.name).toEqual('preset');
     });
 
+    it('should set max zoom', () => {
+      const wrapper = mount(<Graph maxZoom={1} />);
+
+      expect(getCytoscape(wrapper).maxZoom()).toEqual(1);
+    });
+
     it('should set style', () => {
       const styleProp = [{
         selector: '*',
@@ -150,6 +156,13 @@ describe('Graph', () => {
       wrapper.setProps({ layout: updatedLayout, other: 'change' });
 
       expect(getCytoscape(wrapper).layout.mock.calls.length).toBe(1);
+    });
+
+    it('should update max zoom', () => {
+      const wrapper = mount(<Graph maxZoom={1} />);
+      wrapper.setProps({ maxZoom: 2 });
+
+      expect(getCytoscape(wrapper).maxZoom()).toEqual(2);
     });
 
     it('should update style', () => {
