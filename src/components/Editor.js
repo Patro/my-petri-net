@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 import * as nodeType from '../constants/nodeTypes';
 import EditorToolbar from './EditorToolbar'
+import GraphArea from './GraphArea';
 import PetriNetGraph from './PetriNetGraph';
-
-const { Content } = Layout;
 
 class Editor extends Component {
   constructor(props) {
@@ -43,7 +42,7 @@ class Editor extends Component {
       <>
         <EditorToolbar activeNodeType={this.state.activeNodeType} onNodeTypeChange={this.handleNodeTypeChange} />
         <Layout>
-          <Content className="content">
+          <GraphArea>
             <PetriNetGraph
               petriNet={this.props.petriNet}
               selectedId={this.state.selected.id}
@@ -52,7 +51,7 @@ class Editor extends Component {
               onMove={this.props.onMove}
               onSelect={this.handleSelect}
               onUnselect={this.handleUnselect} />
-          </Content>
+          </GraphArea>
         </Layout>
       </>
     );
