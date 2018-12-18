@@ -79,6 +79,7 @@ class PetriNetGraph extends PureComponent {
 
     return <EdgeHandles onAddEdge={this.props.onAddEdge}
                         shouldAddEdge={this.shouldAddEdge}
+                        snap={true}
                         edgeParams={this.edgeParams} />
   }
 }
