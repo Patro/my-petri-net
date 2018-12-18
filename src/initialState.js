@@ -5,6 +5,9 @@ export default {
     [examplePetriNetId]: {
       id: examplePetriNetId,
       name: 'Petri Net',
+      edgesById: {},
+      nodesById: {},
+      markings: [{}],
     },
   },
 };
