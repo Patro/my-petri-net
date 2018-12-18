@@ -111,4 +111,13 @@ describe('Simulator', () => {
       expect(onFireTransition).not.toBeCalledWith('transition-b-id');
     });
   });
+
+  it('should call on reset on unmount', () => {
+    const onReset = jest.fn();
+
+    const wrapper = shallow(<Simulator onReset={onReset} />);
+    wrapper.unmount();
+
+    expect(onReset).toBeCalled();
+  });
 });

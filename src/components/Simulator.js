@@ -19,6 +19,10 @@ class Simulator extends Component {
     return getActiveTransitions(this.props.petriNet).map(transition => transition.id);
   }
 
+  componentWillUnmount() {
+    this.props.onReset();
+  }
+
   handleClickOnElement(type, id) {
     if (!this.isTransitionActive(id)) {
       return;
