@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import * as elementType from '../constants/elementTypes';
 import * as nodeType from '../constants/nodeTypes';
-import EditorToolbar from './EditorToolbar'
+import EditorToolbar from './EditorToolbar';
+import ElementForm from './ElementForm';
 import GraphArea from './GraphArea';
 import PetriNetGraph from './PetriNetGraph';
+import './Editor.css';
+
+const { Sider } = Layout;
 
 class Editor extends Component {
   constructor(props) {
@@ -16,6 +21,18 @@ class Editor extends Component {
     this.handleNodeTypeChange = this.handleNodeTypeChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleUnselect = this.handleUnselect.bind(this);
+  }
+
+  getSelectedElement() {
+    const id = this.state.selected.id;
+    switch (this.state.selected.type) {
+      case elementType.EDGE:
+        return this.props.petriNet.edgesById[id];
+      case elementType.NODE:
+        return this.props.petriNet.nodesById[id];
+      default:
+        return;
+    }
   }
 
   handleClickOnBackground(position) {
@@ -53,9 +70,21 @@ class Editor extends Component {
               onSelect={this.handleSelect}
               onUnselect={this.handleUnselect} />
           </GraphArea>
+          { this.renderSidebar() }
         </Layout>
       </>
     );
+  }
+
+  renderSidebar() {
+    const element = this.getSelectedElement();
+    if (element === undefined) {
+      return;
+    }
+
+    return <Sider className="editor__sidebar" width={260}>
+             <ElementForm element={element} elementType={this.state.selected.type} />
+           </Sider>
   }
 }
 

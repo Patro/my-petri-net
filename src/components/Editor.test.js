@@ -1,8 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import * as elementType from '../constants/elementTypes';
 import * as nodeType from '../constants/nodeTypes';
 import Editor from './Editor';
 import EditorToolbar from './EditorToolbar';
+import ElementForm from './ElementForm';
 import PetriNetGraph from './PetriNetGraph';
 
 describe('Editor', () => {
@@ -123,6 +125,63 @@ describe('Editor', () => {
       petriNetGraph.props().onUnselect(nodeType.TRANSITION, 'node-b-id');
 
       expect(wrapper.state()).toMatchObject({ selected: { type: nodeType.TRANSITION, id: 'node-a-id'} });
+    });
+  });
+
+  describe('element form', () => {
+    it('should render element form if element is selected', () => {
+      const petriNet = {
+        nodesById: {
+          'node-id': {
+            id: 'node-id',
+          },
+        },
+      };
+
+      const wrapper = shallow(<Editor petriNet={petriNet} />);
+      wrapper.setState({ selected: { type: elementType.NODE, id: 'node-id' }});
+      const elementForm = wrapper.find(ElementForm);
+
+      expect(elementForm.length).toBe(1);
+    });
+
+    it('should not render element form if no element is selected', () => {
+      const wrapper = shallow(<Editor />);
+      const elementForm = wrapper.find(ElementForm);
+
+      expect(elementForm.length).toBe(0);
+    });
+
+    it('should map selected node to form prop', () => {
+      const petriNet = {
+        nodesById: {
+          'node-id': {
+            id: 'node-id',
+          },
+        },
+      };
+
+      const wrapper = shallow(<Editor petriNet={petriNet} />);
+      wrapper.setState({ selected: { type: elementType.NODE, id: 'node-id' }});
+      const elementForm = wrapper.find(ElementForm);
+
+      expect(elementForm.props().element).toBe(petriNet.nodesById['node-id']);
+    });
+
+    it('should map selected edge to form prop', () => {
+      const petriNet = {
+        edgesById: {
+          'edge-id': {
+            id: 'edge-id',
+          },
+        },
+      };
+
+      const wrapper = shallow(<Editor petriNet={petriNet} />);
+      wrapper.setState({ selected: { type: elementType.EDGE, id: 'edge-id' }});
+      const elementForm = wrapper.find(ElementForm);
+
+      expect(elementForm.props().element).toBe(petriNet.edgesById['edge-id']);
     });
   });
 });
