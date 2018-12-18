@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "antd": "3.10.9",
-    "cytoscape": "3.3.0",
-    "cytoscape-edgehandles": "3.5.0",
+    "cytoscape": "3.2.22",
+    "cytoscape-edgehandles": "3.4.2",
     "memoizee": "0.4.14",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
