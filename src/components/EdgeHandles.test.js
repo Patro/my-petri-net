@@ -4,11 +4,13 @@ import edgeHandles from 'cytoscape-edgehandles';
 import CytoscapeContext from '../contexts/CytoscapeContext';
 import EdgeHandles from './EdgeHandles';
 
+const setupCytoscapeContext = (initFn) => ({
+  edgehandles: initFn,
+});
+
 describe('EdgeHandles', () => {
   it('should use cytoscape context', () => {
-    const cytoscapeContext = {
-      edgehandles: jest.fn(),
-    };
+    const cytoscapeContext = setupCytoscapeContext(jest.fn());
 
     const wrapper = mount(
       <CytoscapeContext.Provider value={cytoscapeContext}>
@@ -40,9 +42,7 @@ describe('EdgeHandles', () => {
   describe('initialization', () => {
     it('should initialize edgehandles on mount', () => {
       const edgehandlesInit = jest.fn();
-      const cytoscapeContext = {
-        edgehandles: edgehandlesInit,
-      };
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
 
       mount(
         <CytoscapeContext.Provider value={cytoscapeContext}>
@@ -62,7 +62,7 @@ describe('EdgeHandles', () => {
           <EdgeHandles />
         </CytoscapeContext.Provider>
       );
-      wrapper.setProps({ value: { edgehandles: edgehandlesInit } });
+      wrapper.setProps({ value: setupCytoscapeContext(edgehandlesInit) });
 
       expect(edgehandlesInit).toBeCalled();
     });
@@ -70,18 +70,29 @@ describe('EdgeHandles', () => {
     it('should destroy existing edgehandles on update', () => {
       const edgehandlesDestroy = jest.fn();
       const edgehandlesInit = () => ({ destroy: edgehandlesDestroy });
-      const cytoscapeContext = {
-        edgehandles: edgehandlesInit,
-      };
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
 
       const wrapper = mount(
         <CytoscapeContext.Provider value={cytoscapeContext}>
           <EdgeHandles />
         </CytoscapeContext.Provider>
       );
-      wrapper.setProps({ value: { edgehandles: jest.fn() } });
+      wrapper.setProps({ value: setupCytoscapeContext(jest.fn()) });
 
       expect(edgehandlesDestroy).toBeCalled();
+    });
+
+    it('should set snap option', () => {
+      const edgehandlesInit = jest.fn();
+      const cytoscapeContext = setupCytoscapeContext(edgehandlesInit);
+
+      mount(
+        <CytoscapeContext.Provider value={cytoscapeContext}>
+          <EdgeHandles snap={true} />
+        </CytoscapeContext.Provider>
+      );
+
+      expect(edgehandlesInit.mock.calls[0][0]).toMatchObject({ snap: true });
     });
   });
 });

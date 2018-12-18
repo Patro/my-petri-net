@@ -16,7 +16,9 @@ class EdgeHandles extends PureComponent {
       this.edgehandles.destroy();
     }
 
-    this.edgehandles = this.context.edgehandles();
+    this.edgehandles = this.context.edgehandles({
+      snap: this.props.snap,
+    });
   }
 
   componentDidMount = () => {
