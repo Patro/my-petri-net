@@ -46,6 +46,7 @@ class Editor extends Component {
             <PetriNetGraph
               petriNet={this.props.petriNet}
               selectedId={this.state.selected.id}
+              maxZoom={1}
               onAddEdge={this.props.onAddEdge}
               onClickOnBackground={this.handleClickOnBackground}
               onMove={this.props.onMove}
