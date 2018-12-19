@@ -2,6 +2,8 @@ const mockElement = (cy, params) => {
   const el = {
     _addEventFields: (event) => ({ target: el, ...event }),
     _json: () => ( cy._json[cy._jsonIndex(el.id())] ),
+    cy: jest.fn(() => ( cy )),
+    classes: jest.fn(() => ( el._json.classes )),
     data: jest.fn(() => ( el._json().data )),
     group: jest.fn(() => ( params.group )),
     emit: jest.fn((event) => ( cy.emit(el._addEventFields(event)) )),
@@ -10,6 +12,10 @@ const mockElement = (cy, params) => {
     position: jest.fn((position) => ( position ? el._json().position = position : el._json().position )),
     remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
     select: jest.fn(() => ( el.emit({ type: 'select' }) )),
+    source: jest.fn(() => ( cy.elements(`#${el.data().source}`).first() )),
+    sourceEndpoint: jest.fn(() => ( el.source().position() )),
+    target: jest.fn(() => ( cy.elements(`#${el.data().target}`).first() )),
+    targetEndpoint: jest.fn(() => ( el.target().position() )),
   };
   return el;
 };
@@ -34,7 +40,9 @@ const mockCore = (options) => {
     _style: options.style,
     add: jest.fn((json) => {
       cy._json.push(json);
-      cy._elements.push(mockElement(cy, json));
+      const element = mockElement(cy, json);
+      cy._elements.push(element);
+      return element;
     }),
     container: jest.fn(() => ( cy._container )),
     edgehandles: jest.fn(),
