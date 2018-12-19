@@ -1,8 +1,9 @@
 import cytoscape from 'cytoscape';
 import TokenFlowAnimation from './TokenFlowAnimation';
 
-const getEdge = (cy) => cy.elements('#node-a_node-b').first();
-const setupCytoscape = () => (
+export const getCreatedToken = (cy) => cy.add.mock.results[0].value;
+export const getEdge = (cy) => cy.elements('#node-a_node-b').first();
+export const setupCytoscape = () => (
   cytoscape({
     elements: [
       {
@@ -64,7 +65,7 @@ describe('TokenFlowAnimation', () => {
 
     await animation.play();
 
-    const token = cy.add.mock.results[0].value;
+    const token = getCreatedToken(cy);
     expect(animation.animateToken).toBeCalledWith(token);
   });
 
@@ -76,7 +77,7 @@ describe('TokenFlowAnimation', () => {
 
     await animation.play();
 
-    const token = cy.add.mock.results[0].value;
+    const token = getCreatedToken(cy);
     expect(token.remove).toBeCalled();
   });
 });

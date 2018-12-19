@@ -1,9 +1,14 @@
+import uuidv4 from 'uuid/v4';
+
 const mockElement = (cy, params) => {
   const el = {
     _addEventFields: (event) => ({ target: el, ...event }),
     _json: () => ( cy._json[cy._jsonIndex(el.id())] ),
-    cy: jest.fn(() => ( cy )),
+    animate: jest.fn(),
+    animation: jest.fn(() => ({ play: () => ({ promise: () => ( Promise.resolve() )}) }) ),
     classes: jest.fn(() => ( el._json.classes )),
+    controlPoints: jest.fn(() => undefined),
+    cy: jest.fn(() => ( cy )),
     data: jest.fn(() => ( el._json().data )),
     group: jest.fn(() => ( params.group )),
     emit: jest.fn((event) => ( cy.emit(el._addEventFields(event)) )),
@@ -39,8 +44,9 @@ const mockCore = (options) => {
     _maxZoom: options.maxZoom,
     _style: options.style,
     add: jest.fn((json) => {
-      cy._json.push(json);
-      const element = mockElement(cy, json);
+      const _json = { ...json, data: { id: uuidv4(), ...json.data }};
+      cy._json.push(_json);
+      const element = mockElement(cy, _json);
       cy._elements.push(element);
       return element;
     }),
