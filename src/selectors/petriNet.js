@@ -1,11 +1,11 @@
 import * as nodeTypes from '../constants/nodeTypes';
 
 export const getIncomingEdges = (state, nodeId) => (
-  Object.values(state.edgesById).filter(edge => edge.to == nodeId)
+  Object.values(state.edgesById).filter(edge => edge.to === nodeId)
 );
 
 export const getOutgoingEdges = (state, nodeId) => (
-  Object.values(state.edgesById).filter(edge => edge.from == nodeId)
+  Object.values(state.edgesById).filter(edge => edge.from === nodeId)
 );
 
 export const getNumberOfTokens = (state, placeId) => (
@@ -14,7 +14,7 @@ export const getNumberOfTokens = (state, placeId) => (
 
 const canTakeTokens = (state, placeId, numberOfTokens) => {
   const place = state.nodesById[placeId];
-  if (place.capacityLimit == undefined) {
+  if (place.capacityLimit === undefined) {
     return true;
   }
   const leftCapacity = place.capacityLimit - getNumberOfTokens(state, placeId);
@@ -23,7 +23,7 @@ const canTakeTokens = (state, placeId, numberOfTokens) => {
 
 export const getActiveTransitions = (state) => {
   const all = Object.values(state.nodesById)
-    .filter(node => node.type == nodeTypes.TRANSITION);
+    .filter(node => node.type === nodeTypes.TRANSITION);
   const active = all.filter(transition => {
     const incoming = getIncomingEdges(state, transition.id);
     if (incoming.some((edge) => edge.weight > getNumberOfTokens(state, edge.from))) {

@@ -17,7 +17,7 @@ const petriNetsByIds = (state = initialState, action) => {
         },
       };
     default: {
-      if (action.petriNetId == undefined) {
+      if (action.petriNetId === undefined) {
         return state;
       }
 
