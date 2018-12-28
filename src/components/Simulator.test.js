@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import * as elementType from '../constants/elementTypes';
 import * as nodeType from '../constants/nodeTypes';
+import GraphAnimation from './GraphAnimation';
 import PetriNetGraph from './PetriNetGraph';
 import Simulator from './Simulator';
 import SimulatorToolbar from './SimulatorToolbar';
@@ -89,26 +90,46 @@ describe('Simulator', () => {
       expect(petriNetGraph.props().highlightedIds).toEqual(['transition-a-id']);
     });
 
-    it('should call on fire transition on click on active transition', () => {
-      const onFireTransition = jest.fn();
+    it('should not highlight any transition after click on active transition', () => {
       const petriNet = setupPetriNet();
 
-      const wrapper = shallow(<Simulator petriNet={petriNet} onFireTransition={onFireTransition} />);
+      const wrapper = shallow(<Simulator petriNet={petriNet} />);
+      wrapper.instance().handleClickOnElement(elementType.node, 'transition-a-id');
       const petriNetGraph = wrapper.find(PetriNetGraph);
-      petriNetGraph.props().onClickOnElement(elementType.node, 'transition-a-id');
 
-      expect(onFireTransition).toBeCalledWith('transition-a-id');
+      expect(petriNetGraph.props().highlightedIds).toEqual([]);
     });
 
-    it('should not call on fire transition on click on inactive transition', () => {
+    it('should render graph animation with element id on click on active transition', () => {
+      const petriNet = setupPetriNet();
+
+      const wrapper = shallow(<Simulator petriNet={petriNet} />);
+      wrapper.instance().handleClickOnElement(elementType.node, 'transition-a-id');
+      const graphAnimation = wrapper.find(GraphAnimation);
+
+      expect(graphAnimation.props().elementId).toBe('transition-a-id');
+    });
+
+    it('should not render graph animation on click on inactive transition', () => {
+      const petriNet = setupPetriNet();
+
+      const wrapper = shallow(<Simulator petriNet={petriNet} />);
+      wrapper.instance().handleClickOnElement(elementType.node, 'transition-b-id');
+      const graphAnimation = wrapper.find(GraphAnimation);
+
+      expect(graphAnimation.length).toBe(0);
+    });
+
+    it('should call on fire transition on animation end', () => {
       const onFireTransition = jest.fn();
       const petriNet = setupPetriNet();
 
       const wrapper = shallow(<Simulator petriNet={petriNet} onFireTransition={onFireTransition} />);
-      const petriNetGraph = wrapper.find(PetriNetGraph);
-      petriNetGraph.props().onClickOnElement(elementType.node, 'transition-b-id');
+      wrapper.instance().handleClickOnElement(elementType.node, 'transition-a-id');
+      const graphAnimation = wrapper.find(GraphAnimation);
+      graphAnimation.props().onEnd();
 
-      expect(onFireTransition).not.toBeCalledWith('transition-b-id');
+      expect(onFireTransition).toBeCalledWith('transition-a-id');
     });
   });
 
