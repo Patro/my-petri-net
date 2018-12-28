@@ -68,6 +68,7 @@ class PetriNetGraph extends PureComponent {
              elementsById={this.elementsById()}
              {...this.props} >
         {this.renderEdgeHandles()}
+        {this.props.children}
       </Graph>
     );
   }

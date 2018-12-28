@@ -305,4 +305,18 @@ describe('PetriNetGraph', () => {
       expect(onAddEdge).toBeCalledWith('node-a', 'node-b');
     });
   });
+
+  describe('children', () => {
+    it('should render children', () => {
+      const petriNet = setupPetriNet();
+
+      const wrapper = shallow(
+        <PetriNetGraph petriNet={petriNet}>
+          <div className="test_div" />
+        </PetriNetGraph>
+      );
+
+      expect(wrapper.find('.test_div').length).toBe(1);
+    });
+  });
 });
