@@ -9,10 +9,21 @@ const mockElement = (cy, params) => {
     classes: jest.fn(() => ( el._json.classes )),
     controlPoints: jest.fn(() => undefined),
     cy: jest.fn(() => ( cy )),
-    data: jest.fn(() => ( el._json().data )),
+    data: jest.fn((name = undefined, value = undefined) => {
+      if (name !== undefined && value !== undefined) {
+        el._json().data[name] = value;
+      }
+      else if (name !== undefined) {
+        return el._json().data[name];
+      }
+      else {
+        return el._json().data
+      }
+    }),
     group: jest.fn(() => ( params.group )),
     emit: jest.fn((event) => ( cy.emit(el._addEventFields(event)) )),
     id: jest.fn(() => ( params.data.id )),
+    incomers: jest.fn(() => ( cy._elements.filter(el => el.data().target === params.data.id) )),
     json: jest.fn((json) => ( json ? cy._json[cy._jsonIndex(el.id())] = json : el._json() )),
     position: jest.fn((position) => ( position ? el._json().position = position : el._json().position )),
     remove: jest.fn(() => ( cy._elements = cy._elements.filter(el => el !== this) )),
@@ -21,6 +32,7 @@ const mockElement = (cy, params) => {
     sourceEndpoint: jest.fn(() => ( el.source().position() )),
     target: jest.fn(() => ( cy.elements(`#${el.data().target}`).first() )),
     targetEndpoint: jest.fn(() => ( el.target().position() )),
+    outgoers: jest.fn(() => ( cy._elements.filter(el => el.data().source === params.data.id) )),
   };
   return el;
 };
