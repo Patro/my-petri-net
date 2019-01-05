@@ -6,7 +6,6 @@ import { createStore } from 'redux';
 import App from './components/App';
 import rootReducer from './reducers';
 import inititalState from './initialState';
-import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 const store = createStore(rootReducer, inititalState);
@@ -23,8 +22,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
