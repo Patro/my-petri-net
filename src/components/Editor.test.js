@@ -100,19 +100,23 @@ describe('Editor', () => {
     });
 
     it('should set selected id on state change', () => {
-      const wrapper = shallow(<Editor />);
-      wrapper.setState({ selected: { type: nodeType.TRANSITION, id: 'node-id' }})
+      const petriNet = { nodesById: {} };
+
+      const wrapper = shallow(<Editor petriNet={petriNet} />);
+      wrapper.setState({ selected: { type: elementType.NODE, id: 'node-id' }})
       const petriNetGraph = wrapper.find(PetriNetGraph);
 
       expect(petriNetGraph.props().selectedId).toEqual('node-id');
     });
 
     it('should update type and id of selected on select event', () => {
-      const wrapper = shallow(<Editor />);
-      const petriNetGraph = wrapper.find(PetriNetGraph);
-      petriNetGraph.props().onSelect(nodeType.TRANSITION, 'node-id');
+      const petriNet = { nodesById: {} };
 
-      expect(wrapper.state()).toMatchObject({ selected: { type: nodeType.TRANSITION, id: 'node-id' } });
+      const wrapper = shallow(<Editor petriNet={petriNet} />);
+      const petriNetGraph = wrapper.find(PetriNetGraph);
+      petriNetGraph.props().onSelect(elementType.NODE, 'node-id');
+
+      expect(wrapper.state()).toMatchObject({ selected: { type: elementType.NODE, id: 'node-id' } });
     });
 
     it('should update type and id of selected on background event', () => {
@@ -139,21 +143,25 @@ describe('Editor', () => {
     });
 
     it('should clear selected on unselect event if unselected element was selected before', () => {
-      const wrapper = shallow(<Editor />);
-      wrapper.setState({ selected: { type: nodeType.TRANSITION, id: 'node-id' }});
+      const petriNet = { nodesById: {} };
+
+      const wrapper = shallow(<Editor petriNet={petriNet} />);
+      wrapper.setState({ selected: { type: elementType.NODE, id: 'node-id' }});
       const petriNetGraph = wrapper.find(PetriNetGraph);
-      petriNetGraph.props().onUnselect(nodeType.TRANSITION, 'node-id');
+      petriNetGraph.props().onUnselect(elementType.NODE, 'node-id');
 
       expect(wrapper.state()).toMatchObject({ selected: {} });
     });
 
     it('should leave selected untouched on unselect event if unselected element was not selected before', () => {
-      const wrapper = shallow(<Editor />);
-      wrapper.setState({ selected: { type: nodeType.TRANSITION, id: 'node-a-id' }});
-      const petriNetGraph = wrapper.find(PetriNetGraph);
-      petriNetGraph.props().onUnselect(nodeType.TRANSITION, 'node-b-id');
+      const petriNet = { nodesById: {} };
 
-      expect(wrapper.state()).toMatchObject({ selected: { type: nodeType.TRANSITION, id: 'node-a-id'} });
+      const wrapper = shallow(<Editor petriNet={petriNet} />);
+      wrapper.setState({ selected: { type: elementType.NODE, id: 'node-a-id' }});
+      const petriNetGraph = wrapper.find(PetriNetGraph);
+      petriNetGraph.props().onUnselect(elementType.NODE, 'node-b-id');
+
+      expect(wrapper.state()).toMatchObject({ selected: { type: elementType.NODE, id: 'node-a-id'} });
     });
   });
 
