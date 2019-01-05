@@ -18,6 +18,7 @@ class Editor extends Component {
       activeNodeType: nodeType.TRANSITION,
       selected: {},
     };
+    this.handleAddEdge = this.handleAddEdge.bind(this);
     this.handleClickOnBackground = this.handleClickOnBackground.bind(this);
     this.handleNodeTypeChange = this.handleNodeTypeChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
@@ -34,6 +35,11 @@ class Editor extends Component {
       default:
         return;
     }
+  }
+
+  handleAddEdge(from, to) {
+    this.props.onAddEdge(from, to);
+    this.setState({ selected: { type: elementType.EDGE, id: `${from}_${to}` } });
   }
 
   handleClickOnBackground(position) {
@@ -67,7 +73,7 @@ class Editor extends Component {
               petriNet={this.props.petriNet}
               selectedId={this.state.selected.id}
               maxZoom={1}
-              onAddEdge={this.props.onAddEdge}
+              onAddEdge={this.handleAddEdge}
               onClickOnBackground={this.handleClickOnBackground}
               onMove={this.props.onMove}
               onSelect={this.handleSelect}

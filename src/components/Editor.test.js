@@ -73,9 +73,10 @@ describe('Editor', () => {
     });
 
     it('should forward on add edge event', () => {
+      const petriNet = { edgesById: {} };
       const onAddEdge = jest.fn();
 
-      const wrapper = shallow(<Editor onAddEdge={onAddEdge} />);
+      const wrapper = shallow(<Editor petriNet={petriNet} onAddEdge={onAddEdge} />);
       const petriNetGraph = wrapper.find(PetriNetGraph);
       petriNetGraph.props().onAddEdge('node-a', 'node-b');
 
@@ -124,6 +125,17 @@ describe('Editor', () => {
       petriNetGraph.props().onClickOnBackground({ x: 100, y: 200 });
 
       expect(wrapper.state()).toMatchObject({ selected: { type: elementType.NODE, id: 'generated-uuid' } });
+    });
+
+    it('should update type and id of selected on add edge', () => {
+      const petriNet = { edgesById: {} };
+      const onAddEdge = () => {};
+
+      const wrapper = shallow(<Editor petriNet={petriNet} onAddEdge={onAddEdge} />);
+      const petriNetGraph = wrapper.find(PetriNetGraph);
+      petriNetGraph.props().onAddEdge('node-a', 'node-b');
+
+      expect(wrapper.state()).toMatchObject({ selected: { type: elementType.EDGE, id: 'node-a_node-b' } });
     });
 
     it('should clear selected on unselect event if unselected element was selected before', () => {
