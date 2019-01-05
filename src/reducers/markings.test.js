@@ -10,10 +10,10 @@ describe('markings reducer', () => {
   describe('should handle ADD_NODE', () => {
     it('with undefined state', () => {
       const stateBefore = undefined;
-      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, {x: 200, y: 400});
+      const action = addNode('petri-net-uuid', 'place-uuid', nodeTypes.PLACE, {x: 200, y: 400});
       const stateAfter = [
         {
-          [action.nodeId]: 0,
+          'place-uuid': 0,
         },
       ];
 
@@ -31,17 +31,17 @@ describe('markings reducer', () => {
           'place-uuid-2': 2,
         }
       ];
-      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, {x: 200, y: 400});
+      const action = addNode('petri-net-uuid', 'place-uuid-3', nodeTypes.PLACE, {x: 200, y: 400});
       const stateAfter = [
         {
           'place-uuid-1': 1,
           'place-uuid-2': 3,
-          [action.nodeId]: 0,
+          'place-uuid-3': 0,
         },
         {
           'place-uuid-1': 3,
           'place-uuid-2': 2,
-          [action.nodeId]: 0,
+          'place-uuid-3': 0,
         }
       ];
 

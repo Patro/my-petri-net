@@ -1,11 +1,14 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import uuidv4 from 'uuid/v4';
 import * as elementType from '../constants/elementTypes';
 import * as nodeType from '../constants/nodeTypes';
 import Editor from './Editor';
 import EditorToolbar from './EditorToolbar';
 import ElementForm from './ElementForm';
 import PetriNetGraph from './PetriNetGraph';
+
+jest.mock('uuid/v4');
 
 describe('Editor', () => {
   describe('toolbar', () => {
@@ -58,13 +61,14 @@ describe('Editor', () => {
     });
 
     it('should call on add node callback on click on background event', () => {
+      uuidv4.mockImplementation(() => 'generated-uuid');
       const onAddNode = jest.fn();
 
       const wrapper = shallow(<Editor onAddNode={onAddNode} />);
       const petriNetGraph = wrapper.find(PetriNetGraph);
       petriNetGraph.props().onClickOnBackground({ x: 100, y: 200 });
 
-      expect(onAddNode).toBeCalledWith(nodeType.TRANSITION, { x: 100, y: 200 });
+      expect(onAddNode).toBeCalledWith('generated-uuid', nodeType.TRANSITION, { x: 100, y: 200 });
     });
 
     it('should forward on add edge event', () => {

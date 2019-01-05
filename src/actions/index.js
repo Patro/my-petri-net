@@ -41,10 +41,10 @@ export const removeEdge = (petriNetId, edgeId) => ({
   edgeId,
 });
 
-export const addNode = (petriNetId, nodeType, position) => ({
+export const addNode = (petriNetId, nodeId, nodeType, position) => ({
   type: ADD_NODE,
   petriNetId,
-  nodeId: uuidv4(),
+  nodeId,
   nodeType,
   position,
 });

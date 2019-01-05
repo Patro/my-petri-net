@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import uuidv4 from 'uuid/v4';
 import * as elementType from '../constants/elementTypes';
 import * as nodeType from '../constants/nodeTypes';
 import EditorToolbar from './EditorToolbar';
@@ -36,7 +37,8 @@ class Editor extends Component {
   }
 
   handleClickOnBackground(position) {
-    this.props.onAddNode(this.state.activeNodeType, position);
+    const nodeId = uuidv4();
+    this.props.onAddNode(nodeId, this.state.activeNodeType, position);
   }
 
   handleSelect(type, id) {

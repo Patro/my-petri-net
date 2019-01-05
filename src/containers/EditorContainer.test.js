@@ -80,12 +80,13 @@ describe('EditorContainer', () => {
 
     const wrapper = mountContainer({ store, params });
     const editor = wrapper.find(Editor);
-    editor.props().onAddNode(nodeType.PLACE, { x: 100, y: 200 });
+    editor.props().onAddNode('node-uuid', nodeType.PLACE, { x: 100, y: 200 });
 
     const action = store.getActions()[0];
     const expectedAction = {
       type: ADD_NODE,
       petriNetId: 'petri-net-uuid-2',
+      nodeId: 'node-uuid',
       nodeType: nodeType.PLACE,
       position: { x: 100, y: 200 },
     };

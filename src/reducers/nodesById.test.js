@@ -13,13 +13,13 @@ describe('nodes by id reducer', () => {
           id: 'node-uuid-1',
         },
       };
-      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, {x: 200, y: 400});
+      const action = addNode('petri-net-uuid', 'node-uuid-2', nodeTypes.TRANSITION, {x: 200, y: 400});
       const stateAfter = {
         'node-uuid-1': {
           id: 'node-uuid-1',
         },
-        [action.nodeId]: {
-          id: action.nodeId,
+        'node-uuid-2': {
+          id: 'node-uuid-2',
           type: nodeTypes.TRANSITION,
           position: {
             x: 200,
@@ -34,7 +34,7 @@ describe('nodes by id reducer', () => {
     it('should clone position from action', () => {
       const stateBefore = {};
       const position = {x: 200, y: 400};
-      const action = addNode('petri-net-uuid', nodeTypes.TRANSITION, position);
+      const action = addNode('petri-net-uuid', 'node-uuid', nodeTypes.TRANSITION, position);
       const reducedState = nodesById(stateBefore, action);
       position.x = 400;
 

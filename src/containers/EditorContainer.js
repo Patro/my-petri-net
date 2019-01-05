@@ -12,8 +12,8 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
   onAddEdge: (from, to) => dispatch(
     addEdge(getCurrentPetriNetId(ownProps), from, to)
   ),
-  onAddNode: (nodeType, position) => dispatch(
-    addNode(getCurrentPetriNetId(ownProps), nodeType, position)
+  onAddNode: (nodeId, nodeType, position) => dispatch(
+    addNode(getCurrentPetriNetId(ownProps), nodeId, nodeType, position)
   ),
   onMove: (id, position) => dispatch(
     moveNode(getCurrentPetriNetId(ownProps), id, position)
