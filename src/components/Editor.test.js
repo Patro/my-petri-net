@@ -62,9 +62,10 @@ describe('Editor', () => {
 
     it('should call on add node callback on click on background event', () => {
       uuidv4.mockImplementation(() => 'generated-uuid');
+      const petriNet = { nodesById: {} };
       const onAddNode = jest.fn();
 
-      const wrapper = shallow(<Editor onAddNode={onAddNode} />);
+      const wrapper = shallow(<Editor petriNet={petriNet} onAddNode={onAddNode} />);
       const petriNetGraph = wrapper.find(PetriNetGraph);
       petriNetGraph.props().onClickOnBackground({ x: 100, y: 200 });
 
@@ -111,6 +112,18 @@ describe('Editor', () => {
       petriNetGraph.props().onSelect(nodeType.TRANSITION, 'node-id');
 
       expect(wrapper.state()).toMatchObject({ selected: { type: nodeType.TRANSITION, id: 'node-id' } });
+    });
+
+    it('should update type and id of selected on background event', () => {
+      uuidv4.mockImplementation(() => 'generated-uuid');
+      const petriNet = { nodesById: {} };
+      const onAddNode = () => {};
+
+      const wrapper = shallow(<Editor petriNet={petriNet} onAddNode={onAddNode} />);
+      const petriNetGraph = wrapper.find(PetriNetGraph);
+      petriNetGraph.props().onClickOnBackground({ x: 100, y: 200 });
+
+      expect(wrapper.state()).toMatchObject({ selected: { type: elementType.NODE, id: 'generated-uuid' } });
     });
 
     it('should clear selected on unselect event if unselected element was selected before', () => {

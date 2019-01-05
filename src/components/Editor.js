@@ -39,6 +39,7 @@ class Editor extends Component {
   handleClickOnBackground(position) {
     const nodeId = uuidv4();
     this.props.onAddNode(nodeId, this.state.activeNodeType, position);
+    this.setState({ selected: { type: elementType.NODE, id: nodeId } });
   }
 
   handleSelect(type, id) {
