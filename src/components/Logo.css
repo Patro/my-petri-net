@@ -1,7 +1,8 @@
 .logo {
-  height: 135px;
+  height: 160px;
   width: 100%;
   background-repeat: no-repeat;
   background-position-x: center;
   background-image: url(./../images/logo.png);
+  margin-top: 20px;
 }
